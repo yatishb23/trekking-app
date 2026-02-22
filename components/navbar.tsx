@@ -4,9 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Menu, Mountain } from "lucide-react";
+import { Menu} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   Sheet,
   SheetContent,
@@ -33,18 +34,21 @@ export function Navbar() {
   return (
     <header className="fixed top-2 left-1/2 -translate-x-1/2 z-50 w-full max-w-9xl px-6 lg:px-12">
       <nav className="flex items-center justify-between rounded-full px-6 py-2.5 bg-white/90 backdrop-blur-md border border-stone-200/50 shadow-xl shadow-stone-900/5 transition-all duration-500">
-
         {/* LOGO */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 text-white transition-all duration-500">
-            <Mountain className="h-5 w-5" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-full  overflow-hidden transition-all duration-500">
+            <Image
+    src="/logo.png"
+    alt="Miles With Nature Logo"
+    width={40}   // adjust size if needed (100–140 ideal)
+    height={40}
+    priority
+    className="object-contain"
+  />
           </div>
 
           <span className="font-serif text-xl font-medium tracking-tight text-stone-900">
-            Miles with{" "}
-            <span className="italic text-stone-500">
-              Nature
-            </span>
+            Miles with <span className="italic text-stone-500">Nature</span>
           </span>
         </Link>
 
@@ -125,7 +129,7 @@ export function Navbar() {
                           "block text-4xl font-medium tracking-tighter transition-colors duration-300",
                           pathname === link.href
                             ? "text-stone-900"
-                            : "text-stone-300 hover:text-stone-600"
+                            : "text-stone-300 hover:text-stone-600",
                         )}
                       >
                         {link.label}
@@ -146,7 +150,6 @@ export function Navbar() {
             </SheetContent>
           </Sheet>
         </div>
-
       </nav>
     </header>
   );
