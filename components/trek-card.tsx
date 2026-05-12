@@ -1,108 +1,249 @@
-"use client"
+"use client";
 
-import Image from "next/image"
-import Link from "next/link"
-import { MapPin, Clock, TrendingUp, IndianRupee, ArrowUpRight } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import type { Trek } from "@/lib/data"
+import Image from "next/image";
+import Link from "next/link";
+import { MapPin, Clock, TrendingUp, IndianRupee, ArrowUpRight } from "lucide-react";
+import type { Trek } from "@/lib/data";
 
-const difficultyColors: Record<string, string> = {
-  Easy: "bg-emerald-50 text-emerald-700 border-emerald-100",
-  Moderate: "bg-blue-50 text-blue-700 border-blue-100",
-  Challenging: "bg-orange-50 text-orange-700 border-orange-100",
-  Extreme: "bg-rose-50 text-rose-700 border-rose-100",
-}
+const difficultyStyles: Record<string, { bg: string; color: string }> = {
+  Easy: {
+    bg: "rgba(184,212,170,0.85)",
+    color: "#1A3008",
+  },
+  Moderate: {
+    bg: "rgba(232,213,183,0.85)",
+    color: "#6B4A1A",
+  },
+  Challenging: {
+    bg: "rgba(232,147,90,0.85)",
+    color: "#4A1A08",
+  },
+  Extreme: {
+    bg: "rgba(220,80,60,0.85)",
+    color: "#3A0A08",
+  },
+};
 
 export function TrekCard({ trek }: { trek: Trek }) {
+  const diff = difficultyStyles[trek.difficulty] ?? difficultyStyles.Moderate;
+
   return (
     <Link href={`/treks/${trek.slug}`} className="group block">
-      <div className="relative overflow-hidden bg-white border border-stone-100 transition-all duration-500 hover:shadow-[0_20px_50px_rgba(0,0,0,0.05)] hover:-translate-y-1">
-        
-        <div className="relative overflow-hidden">
+      <div
+        className="overflow-hidden transition-all duration-350"
+        style={{
+          background: "#FDFAF5",
+          borderRadius: "32px",
+          boxShadow:
+            "0 12px 36px rgba(45,80,22,0.12), 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+        }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLElement).style.transform =
+            "translateY(-6px) scale(1.01)";
+          (e.currentTarget as HTMLElement).style.boxShadow =
+            "0 24px 60px rgba(45,80,22,0.2), 0 8px 24px rgba(0,0,0,0.1)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLElement).style.transform = "";
+          (e.currentTarget as HTMLElement).style.boxShadow =
+            "0 12px 36px rgba(45,80,22,0.12), 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)";
+        }}
+      >
+        {/* Image */}
+        <div className="relative h-52 overflow-hidden">
           <Image
-            src={trek.image.startsWith("/") ? `https://images.unsplash.com/photo-1551632432-c735e8299278?auto=format&fit=crop&q=80&w=800` : trek.image} 
+            src={trek.image}
             alt={trek.title}
             fill
-            className="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
-          
-          {/* Subtle Overlay Gradient */}
-          <div className="absolute inset-0 from-black/20 via-transparent to-transparent opacity-60" />
+          {/* Gradient overlay */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, transparent 40%, rgba(45,80,22,0.55))",
+            }}
+          />
 
-          {/* Floating Badges */}
-          <div className="absolute left-5 top-5 flex flex-col gap-2">
-            <Badge
-              variant="outline"
-              className={`w-fit px-3 py-1 text-[10px] font-bold uppercase tracking-widest backdrop-blur-md transition-colors ${difficultyColors[trek.difficulty]}`}
+          {/* Badges */}
+          <div className="absolute left-4 top-4 flex gap-2">
+            <span
+              className="rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em]"
+              style={{
+                background: diff.bg,
+                color: diff.color,
+                backdropFilter: "blur(12px)",
+                boxShadow:
+                  "0 2px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.4)",
+              }}
             >
               {trek.difficulty}
-            </Badge>
-            
+            </span>
             {trek.featured && (
-              <Badge className="w-fit bg-stone-900 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-xl">
+              <span
+                className="rounded-full px-3 py-1 text-[9px] font-bold uppercase tracking-[0.15em]"
+                style={{
+                  background: "rgba(45,80,22,0.85)",
+                  color: "#B8D4AA",
+                  backdropFilter: "blur(12px)",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+                }}
+              >
                 Featured
-              </Badge>
+              </span>
             )}
           </div>
-        </div>
-        
-        {/* Content Section */}
-        <div className="p-8">
-          <div className="flex items-center gap-2 mb-4">
-             <MapPin className="h-3 w-3 text-stone-400" />
-             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400">
-               {trek.location}
-             </span>
+
+          {/* Price pill */}
+          <div
+            className="absolute bottom-4 right-4 flex items-baseline gap-1 rounded-full px-3 py-1.5"
+            style={{
+              background: "rgba(253,250,245,0.92)",
+              backdropFilter: "blur(12px)",
+              boxShadow:
+                "0 4px 12px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8)",
+            }}
+          >
+            <span className="text-[11px] font-bold" style={{ color: "#4A7C3F" }}>
+              ₹
+            </span>
+            <span
+              className="font-serif text-lg font-normal"
+              style={{ color: "#2D5016" }}
+            >
+              {trek.price.toLocaleString()}
+            </span>
+            <span className="text-[9px] font-medium" style={{ color: "#8B7355" }}>
+              /person
+            </span>
           </div>
-          
-          <h3 className="font-serif text-2xl font-medium tracking-tight text-stone-900 group-hover:text-stone-600 transition-colors duration-300">
+        </div>
+
+        {/* Body */}
+        <div className="p-6">
+          {/* Location */}
+          <div
+            className="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em]"
+            style={{ color: "#8B7355" }}
+          >
+            <div
+              className="h-1 w-1 rounded-full"
+              style={{ background: "#7BAF6E" }}
+            />
+            {trek.location}
+          </div>
+
+          {/* Title */}
+          <h3
+            className="font-serif text-[22px] font-normal leading-tight transition-colors duration-300 group-hover:text-[#4A7C3F]"
+            style={{ color: "#2D5016" }}
+          >
             {trek.title}
           </h3>
-          
-          <p className="mt-4 text-sm leading-relaxed text-stone-500 line-clamp-2 font-light">
+
+          {/* Description */}
+          <p
+            className="mt-3 line-clamp-2 text-[12.5px] font-light leading-relaxed"
+            style={{ color: "#8B7355" }}
+          >
             {trek.shortDescription}
           </p>
-          
-          {/* Specs Grid */}
-          <div className="mt-8 grid grid-cols-2 gap-6 border-y border-stone-50 py-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-50">
-                <Clock className="h-3.5 w-3.5 text-stone-600" />
+
+          {/* Stats */}
+          <div
+            className="my-5 grid grid-cols-2 gap-3 py-4"
+            style={{
+              borderTop: "1.5px solid rgba(184,212,170,0.3)",
+              borderBottom: "1.5px solid rgba(184,212,170,0.3)",
+            }}
+          >
+            <div className="flex items-center gap-2.5">
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-xl"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(184,212,170,0.4), rgba(122,175,110,0.2))",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                }}
+              >
+                <Clock className="h-3.5 w-3.5" style={{ color: "#4A7C3F" }} />
               </div>
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-tighter text-stone-400 leading-none">Duration</p>
-                <p className="text-sm font-medium text-stone-800">{trek.duration}</p>
+                <p
+                  className="text-[9px] font-bold uppercase tracking-[0.15em]"
+                  style={{ color: "rgba(139,115,85,0.6)" }}
+                >
+                  Duration
+                </p>
+                <p
+                  className="mt-0.5 text-[12.5px] font-semibold"
+                  style={{ color: "#2D5016" }}
+                >
+                  {trek.duration}
+                </p>
               </div>
             </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-50">
-                <TrendingUp className="h-3.5 w-3.5 text-stone-600" />
+
+            <div className="flex items-center gap-2.5">
+              <div
+                className="flex h-8 w-8 items-center justify-center rounded-xl"
+                style={{
+                  background:
+                    "linear-gradient(135deg, rgba(184,212,170,0.4), rgba(122,175,110,0.2))",
+                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.6)",
+                }}
+              >
+                <TrendingUp
+                  className="h-3.5 w-3.5"
+                  style={{ color: "#4A7C3F" }}
+                />
               </div>
               <div>
-                <p className="text-[9px] font-bold uppercase tracking-tighter text-stone-400 leading-none">Elevation</p>
-                <p className="text-sm font-medium text-stone-800">{trek.altitude}</p>
+                <p
+                  className="text-[9px] font-bold uppercase tracking-[0.15em]"
+                  style={{ color: "rgba(139,115,85,0.6)" }}
+                >
+                  Altitude
+                </p>
+                <p
+                  className="mt-0.5 text-[12.5px] font-semibold"
+                  style={{ color: "#2D5016" }}
+                >
+                  {trek.altitude}
+                </p>
               </div>
             </div>
           </div>
-          
-          {/* Footer / Pricing */}
-          <div className="mt-8 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Price per person</span>
-              <span className="text-xl font-medium text-stone-900 flex items-center gap-0.5">
-                <IndianRupee className="h-3.5 w-3.5" />
-                {trek.price.toLocaleString()}
-              </span>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.08em] text-white transition-all duration-200"
+              style={{
+                background: "linear-gradient(135deg, #4A7C3F, #2D5016)",
+                boxShadow:
+                  "0 4px 16px rgba(74,124,63,0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
+              }}
+            >
+              Book Trek
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </div>
 
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-stone-100 bg-white transition-all duration-500 group-hover:bg-stone-900 group-hover:text-white group-hover:rotate-45">
-               <ArrowUpRight className="h-5 w-5" />
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 group-hover:rotate-45"
+              style={{
+                border: "1.5px solid rgba(74,124,63,0.3)",
+                color: "#4A7C3F",
+                background: "rgba(184,212,170,0.15)",
+              }}
+            >
+              <ArrowUpRight className="h-4 w-4" />
             </div>
           </div>
         </div>
       </div>
     </Link>
-  )
+  );
 }

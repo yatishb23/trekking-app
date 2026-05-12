@@ -1,57 +1,64 @@
-import type { Metadata } from "next"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { SectionHeader } from "@/components/section-header"
-import { TrekCard } from "@/components/trek-card"
-import { treks } from "@/lib/data"
+import type { Metadata } from "next";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { TrekCard } from "@/components/trek-card";
+import { treks } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Treks | Miles With Nature",
   description:
-    "Browse our curated collection of trekking adventures across the most beautiful mountain ranges in India.",
-}
+    "Browse our curated collection of trekking adventures across the most beautiful mountain ranges in Maharashtra.",
+};
 
 export default function TreksPage() {
   return (
-    <>
+    <div style={{ background: "#EDE8DC", minHeight: "100vh" }}>
       <Navbar />
-      <main>
+      <main className="pt-28">
         {/* Hero */}
-        <section className="border-b bg-muted/50 py-20">
-          <div className="mx-auto max-w-3xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
-              Our Adventures
-            </p>
-            <h1 className="mt-4 text-balance font-serif text-4xl font-bold text-foreground sm:text-5xl">
-              Explore Our Treks
-            </h1>
-            <p className="mt-4 text-pretty text-base leading-relaxed text-muted-foreground">
-              From beginner-friendly valley walks to challenging summit climbs,
-              find the perfect trek that matches your spirit of adventure.
-            </p>
-          </div>
+        <section className="px-6 pb-10 pt-4 text-center">
+          <span
+            className="mb-4 inline-block rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em]"
+            style={{ background: "rgba(74,124,63,0.1)", color: "#4A7C3F" }}
+          >
+            Our Adventures
+          </span>
+          <h1
+            className="font-serif text-5xl font-light sm:text-6xl"
+            style={{ color: "#2D5016", lineHeight: 1.08 }}
+          >
+            Explore Our{" "}
+            <em className="italic font-light" style={{ color: "#8B7355" }}>
+              Treks
+            </em>
+          </h1>
+          <p
+            className="mx-auto mt-5 max-w-xl text-base font-light leading-relaxed"
+            style={{ color: "#8B7355" }}
+          >
+            From beginner-friendly valley walks to challenging summit climbs,
+            find the perfect trek that matches your spirit of adventure.
+          </p>
         </section>
 
         {/* Treks Grid */}
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-              {treks.map((trek) => (
-                <TrekCard key={trek.slug} trek={trek} />
-              ))}
-            </div>
-
-            {treks.length === 0 && (
-              <div className="py-20 text-center">
-                <p className="text-muted-foreground">
-                  No treks available at the moment. Check back soon!
-                </p>
-              </div>
-            )}
+        <section className="px-6 pb-16">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {treks.map((trek) => (
+              <TrekCard key={trek.slug} trek={trek} />
+            ))}
           </div>
+
+          {treks.length === 0 && (
+            <div className="py-20 text-center">
+              <p style={{ color: "#8B7355" }}>
+                No treks available at the moment. Check back soon!
+              </p>
+            </div>
+          )}
         </section>
       </main>
       <Footer />
-    </>
-  )
+    </div>
+  );
 }

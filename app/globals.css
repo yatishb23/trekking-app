@@ -1,7 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+/*
+  globals.css — Claymorphism theme for Miles With Nature
+  Drop this into your existing globals.css (or merge into it).
+  Uses Fraunces (serif display) + DM Sans (body).
+*/
 
+
+/* ── Color tokens ───────────────────────────────────────── */
+:root {
+  --forest:        #2D5016;
+  --moss:          #4A7C3F;
+  --sage:          #7BAF6E;
+  --mint:          #B8D4AA;
+  --cream:         #F5F0E8;
+  --warm-white:    #FDFAF5;
+  --page-bg:       #EDE8DC;
+  --terra:         #C4622D;
+  --burnt:         #E8935A;
+  --sand:          #E8D5B7;
+  --stone:         #8B7355;
+
+  /* Clay shadow recipe */
+  --shadow-clay-sm:  0 4px 16px rgba(45,80,22,0.10), inset 0 1px 0 rgba(255,255,255,0.7);
+  --shadow-clay-md:  0 12px 36px rgba(45,80,22,0.12), 0 4px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+  --shadow-clay-lg:  0 20px 60px rgba(45,80,22,0.18), 0 8px 24px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+  --shadow-clay-xl:  0 28px 80px rgba(45,80,22,0.22), 0 12px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+/* ── Base ───────────────────────────────────────────────── */
+html,
+body {
+  font-family: 'DM Sans', sans-serif;
+  background-color: var(--page-bg);
+  color: #2C2816;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Typography helpers ─────────────────────────────────── */
+.font-serif,
+[class*="font-serif"] {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+/* ── Clay card utility ──────────────────────────────────── */
+.clay-card {
+  background: var(--warm-white);
+  border-radius: 32px;
+  box-shadow: var(--shadow-clay-md);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.clay-card:hover {
+  box-shadow: var(--shadow-clay-xl);
+  transform: translateY(-4px);
+}
+
+.clay-card-sm {
+  background: linear-gradient(145deg, #F8F4EE, #EDE8DC);
+  border-radius: 28px;
+  box-shadow: 0 8px 24px rgba(139,115,85,0.10), inset 0 1px 0 rgba(255,255,255,0.7);
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.clay-card-sm:hover {
+  box-shadow: 0 16px 40px rgba(139,115,85,0.18);
+  transform: translateY(-4px);
+}
+
+.clay-section {
+  background: var(--warm-white);
+  border-radius: 36px;
+  box-shadow: 0 12px 40px rgba(45,80,22,0.10), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* ── Clay button utilities ──────────────────────────────── */
+.btn-clay-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(135deg, var(--forest), var(--moss));
+  box-shadow: 0 4px 16px rgba(45,80,22,0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-clay-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45,80,22,0.45);
+}
+
+.btn-clay-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--forest);
+  background: linear-gradient(135deg, #F5F0E8, #EDE8DC);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.9);
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-clay-light:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+
+.btn-clay-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(245,240,232,0.88);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.22);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-clay-ghost:hover {
+  background: rgba(255,255,255,0.18);
+}
+
+/* ── Section label pill ─────────────────────────────────── */
+.section-label {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--moss);
+  background: rgba(74,124,63,0.1);
+}
+
+/* ── Difficulty badge pills ─────────────────────────────── */
+.badge-easy        { background: rgba(184,212,170,0.85); color: #1A3008; }
+.badge-moderate    { background: rgba(232,213,183,0.85); color: #6B4A1A; }
+.badge-challenging { background: rgba(232,147,90,0.85);  color: #4A1A08; }
+.badge-extreme     { background: rgba(220,80,60,0.85);   color: #3A0A08; }
+.badge-featured    { background: rgba(45,80,22,0.85);    color: #B8D4AA; }
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: var(--page-bg); }
+::-webkit-scrollbar-thumb  { background: rgba(74,124,63,0.3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(74,124,63,0.5); }
 @custom-variant dark (&:is(.dark *)); 
 
 :root {
