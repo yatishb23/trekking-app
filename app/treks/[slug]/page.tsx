@@ -1,7 +1,7 @@
-import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { notFound } from "next/navigation"
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   MapPin,
   Clock,
@@ -11,32 +11,36 @@ import {
   IndianRupee,
   Check,
   ArrowLeft,
-} from "lucide-react"
-import { Navbar } from "@/components/navbar"
-import { Footer } from "@/components/footer"
-import { Button } from "@/components/ui/button"
-import { BookTrekButton } from "@/components/book-trek-button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { treks } from "@/lib/data"
+} from "lucide-react";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
+import { Button } from "@/components/ui/button";
+import { BookTrekButton } from "@/components/book-trek-button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { getTrek } from "@/lib/data-store";
 
 interface TrekPageProps {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: TrekPageProps): Promise<Metadata> {
-  const { slug } = await params
-  const trek = treks.find((t) => t.slug === slug)
-  if (!trek) return { title: "Trek Not Found" }
+export async function generateMetadata({
+  params,
+}: TrekPageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const trek = await getTrek(slug);
+  if (!trek) return { title: "Trek Not Found" };
   return {
     title: `${trek.title} | Miles With Nature`,
     description: trek.shortDescription,
-  }
+  };
 }
 
-export function generateStaticParams() {
-  return treks.map((trek) => ({ slug: trek.slug }))
+export async function generateStaticParams() {
+  const { prisma } = await import("@/lib/prisma");
+  const treks = await prisma.trek.findMany({ select: { slug: true } });
+  return treks.map((trek) => ({ slug: trek.slug }));
 }
 
 const difficultyColors: Record<string, string> = {
@@ -44,20 +48,21 @@ const difficultyColors: Record<string, string> = {
   Moderate: "bg-amber-100 text-amber-800",
   Challenging: "bg-orange-100 text-orange-800",
   Extreme: "bg-red-100 text-red-800",
-}
+};
 
 export default async function TrekDetailPage({ params }: TrekPageProps) {
-  const { slug } = await params
-  const trek = treks.find((t) => t.slug === slug)
+  const { slug } = await params;
+  const trek = await getTrek(slug);
 
-  if (!trek) notFound()
+  if (!trek) {
+    notFound();
+  }
 
   return (
     <>
       <Navbar />
       <main>
         <section className="relative flex min-h-[50vh] items-end overflow-hidden">
-          
           <Image
             src={trek.image}
             alt={trek.title}
@@ -75,9 +80,7 @@ export default async function TrekDetailPage({ params }: TrekPageProps) {
               <ArrowLeft className="h-4 w-4" />
               All Treks
             </Link>
-            <Badge
-              className={`${difficultyColors[trek.difficulty]} border-0`}
-            >
+            <Badge className={`${difficultyColors[trek.difficulty]} border-0`}>
               {trek.difficulty}
             </Badge>
             <h1 className="mt-3 font-serif text-3xl font-bold text-white sm:text-4xl md:text-5xl">
@@ -232,5 +235,5 @@ export default async function TrekDetailPage({ params }: TrekPageProps) {
       </main>
       <Footer />
     </>
-  )
+  );
 }

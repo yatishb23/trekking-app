@@ -57,8 +57,8 @@ export function Footer() {
             </em>
           </p>
           <p
-            className="mt-2 text-sm font-light italic leading-relaxed"
-            style={{ color: "#8B7355", fontFamily: "Georgia, serif" }}
+            className="mt-2 font-serif text-sm font-light italic leading-relaxed"
+            style={{ color: "#8B7355" }}
           >
             "To climb mountains is to discover what they are made of, and what
             you are made of."
@@ -101,9 +101,8 @@ export function Footer() {
         {/* Quick Links */}
         <div>
           <h3
-            className="mb-5 text-sm font-semibold uppercase tracking-wider"
+            className="mb-5 font-serif text-sm font-semibold uppercase tracking-wider"
             style={{
-              fontFamily: "Georgia, serif",
               color: "#2D5016",
               letterSpacing: "0.12em",
             }}
@@ -128,9 +127,8 @@ export function Footer() {
         {/* Contact */}
         <div>
           <h3
-            className="mb-5 text-sm font-semibold uppercase tracking-wider"
+            className="mb-5 font-serif text-sm font-semibold uppercase tracking-wider"
             style={{
-              fontFamily: "Georgia, serif",
               color: "#2D5016",
               letterSpacing: "0.12em",
             }}

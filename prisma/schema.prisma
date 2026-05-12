@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String   @unique
+  password    String
+  phone       String?
+  treksBooked Int      @default(0)
+  joinedAt    DateTime @default(now())
+  isAdmin     Boolean  @default(false)
+
+  @@map("users")
+}
+
+model Trek {
+  id               Int      @id @default(autoincrement())
+  slug             String   @unique
+  title            String
+  location         String
+  duration         String
+  difficulty       String
+  altitude         String
+  price            Int
+  image            String   @db.Text
+  shortDescription String
+  description      String
+  highlights       String[]
+  itinerary        Json
+  bestSeason       String
+  groupSize        String
+  includes         String[]
+  featured         Boolean  @default(false)
+  upcoming         Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("treks")
+}

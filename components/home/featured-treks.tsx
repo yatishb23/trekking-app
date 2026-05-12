@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import { ChevronRight, Mountain, Shield, Users, Compass } from "lucide-react";
 import Link from "next/link";
 import { TrekCard } from "@/components/trek-card";
-import { treks } from "@/lib/data";
+import type { Trek } from "@/lib/data";
 
 /* ─────────────────────────────────────────────
    FEATURED TREKS
 ───────────────────────────────────────────── */
-export function FeaturedTreks() {
+export function FeaturedTreks({ treks }: { treks: Trek[] }) {
   const featured = treks.filter((t) => t.featured).slice(0, 3);
 
   return (
@@ -153,7 +153,8 @@ export function Features() {
               cursor: "default",
             }}
             onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)";
+              (e.currentTarget as HTMLElement).style.transform =
+                "translateY(-4px)";
               (e.currentTarget as HTMLElement).style.boxShadow =
                 "0 16px 40px rgba(139,115,85,0.18), 0 4px 12px rgba(0,0,0,0.06)";
             }}

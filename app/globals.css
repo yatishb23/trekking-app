@@ -1,13 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
-
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-/*
-  globals.css — Claymorphism theme for Miles With Nature
-  Drop this into your existing globals.css (or merge into it).
-  Uses Fraunces (serif display) + DM Sans (body).
-*/
 
 
 /* ── Color tokens ───────────────────────────────────────── */
@@ -34,7 +27,6 @@
 /* ── Base ───────────────────────────────────────────────── */
 html,
 body {
-  font-family: 'DM Sans', sans-serif;
   background-color: var(--page-bg);
   color: #2C2816;
   -webkit-font-smoothing: antialiased;
@@ -43,7 +35,7 @@ body {
 /* ── Typography helpers ─────────────────────────────────── */
 .font-serif,
 [class*="font-serif"] {
-  font-family: 'Fraunces', Georgia, serif;
+  font-family: var(--font-playfair), Georgia, serif;
 }
 
 /* ── Clay card utility ──────────────────────────────────── */
@@ -242,7 +234,7 @@ body {
 }
 
 @theme inline {
-  --font-sans: var(--font-poppins);
+  --font-sans: var(--font-inter);
   --font-serif: var(--font-playfair);
   --color-background: var(--background);
   --color-foreground: var(--foreground);

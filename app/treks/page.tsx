@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { TrekCard } from "@/components/trek-card";
-import { treks } from "@/lib/data";
+import { getTreks } from "@/lib/data-store";
 
 export const metadata: Metadata = {
   title: "Treks | Miles With Nature",
@@ -10,7 +10,9 @@ export const metadata: Metadata = {
     "Browse our curated collection of trekking adventures across the most beautiful mountain ranges in Maharashtra.",
 };
 
-export default function TreksPage() {
+export default async function TreksPage() {
+  const treks = await getTreks();
+
   return (
     <div style={{ background: "#EDE8DC", minHeight: "100vh" }}>
       <Navbar />

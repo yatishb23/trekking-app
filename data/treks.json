@@ -1,0 +1,243 @@
+[
+  {
+    "slug": "vasota-jungle-trek",
+    "title": "Vasota Jungle Trek",
+    "location": "Satara, Maharashtra",
+    "duration": "2 Days / 1 Night",
+    "difficulty": "Moderate",
+    "altitude": "3,842 ft",
+    "price": 2499,
+    "image": "/images/trek-vasota.jpg",
+    "shortDescription": "Explore the dense jungles of Koyna Wildlife Sanctuary with a thrilling boat ride across the Shivsagar Lake to reach the majestic Vasota Fort.",
+    "description": "The Vasota Jungle Trek is one of the most exciting monsoon treks in Maharashtra. Located deep inside the Koyna Wildlife Sanctuary in Satara district, this trek begins with a scenic boat ride across the vast Shivsagar Lake. The jungle trail passes through dense tropical forest teeming with wildlife, leading to the ancient Vasota Fort perched atop a mountain. From the fort, you get panoramic views of the Koyna backwaters and the surrounding Sahyadri ranges. This is a must-do trek for anyone who loves the raw beauty of the Western Ghats.",
+    "highlights": [
+      "Scenic boat ride across Shivsagar Lake",
+      "Dense jungle trail through Koyna Wildlife Sanctuary",
+      "Panoramic views from Vasota Fort summit",
+      "Rich biodiversity - chance to spot wildlife",
+      "Night camping under the stars on the fort",
+      "Historical Maratha fort architecture"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Bamnoli - Boat Ride & Jungle Trek",
+        "description": "Early morning departure from Pune. Reach Bamnoli village by 9 AM. Board the boat for a scenic 1.5 hr ride across Shivsagar Lake. Begin the jungle trek (approx. 6 km) through the Koyna sanctuary. Reach Vasota Fort by afternoon. Explore the fort, enjoy sunset views. Night camping and bonfire."
+      },
+      {
+        "day": 2,
+        "title": "Fort Exploration & Return",
+        "description": "Early morning sunrise from the fort. Explore the fort bastions, water cisterns, and temple ruins. Descend through the jungle trail back to the lake. Boat ride back to Bamnoli. Drive back to Pune by evening."
+      }
+    ],
+    "bestSeason": "October to February",
+    "groupSize": "15-25 people",
+    "includes": [
+      "Transport from Pune and back",
+      "Boat ride charges",
+      "All meals (dinner, breakfast, lunch)",
+      "Camping equipment & tents",
+      "Experienced trek leader & local guides",
+      "First aid & safety equipment",
+      "Forest entry permits"
+    ],
+    "featured": true,
+    "upcoming": true
+  },
+  {
+    "slug": "kalsubai-peak-trek",
+    "title": "Kalsubai Peak Trek",
+    "location": "Nashik, Maharashtra",
+    "duration": "1 Day",
+    "difficulty": "Moderate",
+    "altitude": "5,400 ft",
+    "price": 1299,
+    "image": "/images/trek-kalsubai.jpg",
+    "shortDescription": "Conquer the highest peak in Maharashtra with thrilling iron ladder sections and breathtaking 360-degree views of the Sahyadri ranges.",
+    "description": "Kalsubai Peak at 5,400 ft is the highest point in Maharashtra, often called the Everest of Maharashtra. Located in the Nashik district near the Bhandardara region, this trek is a fantastic challenge for both beginners and experienced trekkers. The trail features unique iron ladder and railing sections on steep rock patches, making it an exciting climb. From the summit, you are rewarded with stunning 360-degree panoramic views of the surrounding Sahyadri ranges, including views of Bhandardara Dam, Ratangad Fort, Alang-Madan-Kulang, and the lush green valleys below.",
+    "highlights": [
+      "Highest peak in Maharashtra at 5,400 ft",
+      "Thrilling iron ladder sections on steep rock",
+      "360-degree panoramic Sahyadri views from summit",
+      "Views of Bhandardara Lake and surrounding forts",
+      "Kalsubai Devi temple at the summit",
+      "Perfect for both beginners and experienced trekkers"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Bari Village - Summit & Return",
+        "description": "Depart Pune early morning (4 AM). Reach Bari village base by 7 AM. Begin the ascent through the well-marked trail with iron ladder sections. Reach the summit by 10 AM. Enjoy panoramic views and visit the Kalsubai Devi temple. Descend by afternoon. Drive back to Pune by evening."
+      }
+    ],
+    "bestSeason": "September to February",
+    "groupSize": "15-30 people",
+    "includes": [
+      "Transport from Pune and back",
+      "Breakfast and lunch",
+      "Experienced trek leader",
+      "First aid kit",
+      "Entry charges"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "harishchandragad-trek",
+    "title": "Harishchandragad Trek",
+    "location": "Ahmednagar, Maharashtra",
+    "duration": "2 Days / 1 Night",
+    "difficulty": "Challenging",
+    "altitude": "4,670 ft",
+    "price": 2199,
+    "image": "/images/trek-harishchandragad.jpg",
+    "shortDescription": "Visit the legendary Konkan Kada, one of the most dramatic cliff overhangs in the Sahyadris, on this thrilling fort trek.",
+    "description": "Harishchandragad is one of the most iconic forts in the Sahyadri range, famous for the breathtaking Konkan Kada - a massive vertical cliff with a concave overhang that drops over 3,000 feet. This ancient fort dates back to the 6th century and features remarkable caves, a Pushkarni (ancient water tank), and the Kedareshwar cave with a Shiva Linga surrounded by waist-deep water. The trek via Nalichi Vaat is considered one of the most thrilling and challenging routes, involving rock patches and steep climbs through dense forest.",
+    "highlights": [
+      "Iconic Konkan Kada - one of the largest overhanging cliffs",
+      "Kedareshwar Cave with Shiva Linga in water",
+      "Ancient Pushkarni and Saptatirtha water tanks",
+      "Thrilling Nalichi Vaat rock climbing route",
+      "Night camping on the fort plateau",
+      "Historical significance dating back to 6th century"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Khireshwar - Trek to Fort",
+        "description": "Depart Pune early morning. Reach Khireshwar village. Begin trek via Nalichi Vaat or Pachnai route. Ascend through dense forest and rock patches. Reach the fort by afternoon. Explore Kedareshwar cave and Pushkarni. Sunset at Konkan Kada. Night camping with bonfire and dinner."
+      },
+      {
+        "day": 2,
+        "title": "Sunrise at Konkan Kada & Descent",
+        "description": "Early morning sunrise at Konkan Kada - an absolutely unforgettable experience. Explore remaining fort areas. Begin descent via Pachnai route. Reach base village by afternoon. Drive back to Pune."
+      }
+    ],
+    "bestSeason": "September to February",
+    "groupSize": "15-25 people",
+    "includes": [
+      "Transport from Pune and back",
+      "All meals (dinner, breakfast, lunch)",
+      "Camping equipment & tents",
+      "Experienced trek leader & local guides",
+      "First aid & safety equipment"
+    ],
+    "featured": true
+  },
+  {
+    "slug": "ratangad-fort-trek",
+    "title": "Ratangad Fort Trek",
+    "location": "Nashik, Maharashtra",
+    "duration": "1 Day",
+    "difficulty": "Moderate",
+    "altitude": "4,255 ft",
+    "price": 1499,
+    "image": "/images/trek-ratangad.jpg",
+    "shortDescription": "A gem in the Bhandardara region with a natural rock window, ancient fort ruins, and stunning views of the Sahyadri ranges and Amriteshwar lake.",
+    "description": "Ratangad Fort, located in the Nashik district near Bhandardara, is one of the most scenic forts in the Sahyadri range. The fort is renowned for its Nedhe (a natural window-like hole in the rock face) which offers a unique framing of the surrounding landscape. From the summit, you get spectacular views of Bhandardara Lake (Arthur Lake), Kalsubai Peak, Alang, Madan, Kulang, and the beautiful Sahyadri valleys. The trek starts from the charming Ratanwadi village, which is also home to the ancient Amriteshwar temple built in the Hemadpanthi style.",
+    "highlights": [
+      "Famous Nedhe - natural rock window with stunning views",
+      "Views of Bhandardara Lake and Kalsubai Peak",
+      "Ancient Amriteshwar Temple at Ratanwadi village",
+      "Spectacular Sahyadri panorama from summit",
+      "Rich history and Maratha architecture"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Ratanwadi - Trek & Return",
+        "description": "Early morning departure from Pune. Reach Ratanwadi village. Visit the ancient Amriteshwar temple. Begin the trek through forest and rocky terrain. Reach the fort and explore the Nedhe, bastions, and water cisterns. Descend and drive back to Pune by evening."
+      }
+    ],
+    "bestSeason": "September to February",
+    "groupSize": "15-25 people",
+    "includes": [
+      "Transport from Pune and back",
+      "Breakfast and lunch",
+      "Experienced trek leader",
+      "First aid kit"
+    ]
+  },
+  {
+    "slug": "rajmachi-fort-trek",
+    "title": "Rajmachi Fort Trek",
+    "location": "Pune, Maharashtra",
+    "duration": "2 Days / 1 Night",
+    "difficulty": "Easy",
+    "altitude": "2,710 ft",
+    "price": 1799,
+    "image": "/images/trek-rajmachi.jpg",
+    "shortDescription": "A perfect monsoon trek near Lonavala with twin forts Shrivardhan and Manaranjan, waterfalls, fireflies, and a rustic village stay.",
+    "description": "Rajmachi Fort is one of the most popular weekend treks near Pune and Mumbai. Located near Lonavala, this historical fort complex consists of two fortified peaks - Shrivardhan and Manaranjan. The trek from Kondivade village is especially magical during monsoon when the hills are lush green, hundreds of waterfalls cascade down the mountains, and the valley is filled with clouds. The Udhewadi village near the fort offers an authentic Maharashtrian rural experience with warm hospitality and home-cooked food. During the pre-monsoon months, the fort is famous for its stunning firefly festival.",
+    "highlights": [
+      "Twin forts - Shrivardhan and Manaranjan",
+      "Spectacular monsoon waterfalls and cloud views",
+      "Authentic village homestay experience at Udhewadi",
+      "Firefly season (May-June) is magical",
+      "Easy trek suitable for beginners and families",
+      "Close to Pune and Mumbai - perfect weekend getaway"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Kondivade - Trek to Udhewadi",
+        "description": "Depart Pune morning. Reach Kondivade village near Karjat. Begin the gradual trek (approx. 15 km) through villages and forest trail. Enjoy the waterfalls en route during monsoon. Reach Udhewadi village by evening. Home-cooked Maharashtrian dinner and bonfire."
+      },
+      {
+        "day": 2,
+        "title": "Fort Exploration & Return",
+        "description": "Early morning trek to Shrivardhan and Manaranjan forts. Explore the bastions, gates, and enjoy panoramic views. Return to Udhewadi for breakfast. Trek back to Kondivade village. Drive back to Pune."
+      }
+    ],
+    "bestSeason": "June to February",
+    "groupSize": "15-30 people",
+    "includes": [
+      "Transport from Pune and back",
+      "All meals (dinner, breakfast, lunch)",
+      "Village homestay accommodation",
+      "Experienced trek leader",
+      "First aid kit"
+    ]
+  },
+  {
+    "slug": "sandhan-valley-trek",
+    "title": "Sandhan Valley Trek",
+    "location": "Nashik, Maharashtra",
+    "duration": "2 Days / 1 Night",
+    "difficulty": "Challenging",
+    "altitude": "3,000 ft",
+    "price": 2299,
+    "image": "/images/gallery-3.jpg",
+    "shortDescription": "Descend into the Valley of Shadows - a narrow canyon with towering cliffs, rappelling sections, and water pools in the heart of the Sahyadris.",
+    "description": "Sandhan Valley, also known as the Valley of Shadows, is one of the most unique trekking experiences in the Sahyadri range. Located in the Nashik district near Bhandardara, this spectacular canyon features narrow passages between towering rock walls that reach up to 200 feet high. The trek involves descending into the valley through rappelling, rock climbing, swimming through water pools, and navigating through dark narrow passages. It is an adrenaline-pumping adventure that combines canyoneering with traditional trekking.",
+    "highlights": [
+      "Descend into the Valley of Shadows canyon",
+      "Rappelling down rock faces",
+      "Swimming through natural water pools",
+      "Towering 200 ft rock walls on both sides",
+      "Night camping inside the valley",
+      "One of the most unique treks in Maharashtra"
+    ],
+    "itinerary": [
+      {
+        "day": 1,
+        "title": "Pune to Samrad - Descend into Sandhan Valley",
+        "description": "Early morning departure from Pune. Reach Samrad village. Begin the descent into Sandhan Valley. Navigate through narrow passages, rock patches, and water pools. Rappelling at key sections. Reach the camping spot inside the valley. Night camping with bonfire."
+      },
+      {
+        "day": 2,
+        "title": "Valley Exit & Return",
+        "description": "Continue through the remaining valley sections. Exit the valley at Dehne village. Drive back to Pune by evening."
+      }
+    ],
+    "bestSeason": "October to May",
+    "groupSize": "15-20 people",
+    "includes": [
+      "Transport from Pune and back",
+      "All meals",
+      "Rappelling and technical equipment",
+      "Camping equipment",
+      "Experienced trek leader & safety team",
+      "First aid & safety equipment"
+    ]
+  }
+]

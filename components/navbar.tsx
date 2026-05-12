@@ -153,11 +153,10 @@ export function Navbar() {
                       <Link
                         href={link.href}
                         onClick={() => setOpen(false)}
-                        className="block text-4xl font-medium tracking-tighter transition-colors duration-300"
+                        className="font-serif block text-4xl font-medium tracking-tighter transition-colors duration-300"
                         style={{
                           color:
                             pathname === link.href ? "#2D5016" : "rgba(139,115,85,0.4)",
-                          fontFamily: "'Georgia', serif",
                         }}
                       >
                         {link.label}
