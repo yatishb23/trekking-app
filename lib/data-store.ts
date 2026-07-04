@@ -6,6 +6,10 @@ import { setAdminSession } from "./auth";
 import { verifyAdmin } from "./auth";
 import type { Trek } from "./data";
 
+const baseUrl =
+  process.env.NEXT_PUBLIC_APP_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+
 function toTrek(t: {
   id: number;
   slug: string;
@@ -50,19 +54,23 @@ function toTrek(t: {
 }
 
 export async function getTreks(): Promise<Trek[]> {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/trek`, {
-    cache: "no-store",
-  });
-  if (!res.ok) throw new Error("Failed to fetch treks");
-  let treks = await res.json();
+  try {
+    const res = await fetch(`${baseUrl}/api/trek`, {
+      cache: "no-store",
+    });
+    if (!res.ok) return [];
+    let treks = await res.json();
 
-  // Try sorting newly fetched manually since API did not provide orderBy
-  treks = treks.sort(
-    (a: any, b: any) =>
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  );
+    // Try sorting newly fetched manually since API did not provide orderBy
+    treks = treks.sort(
+      (a: any, b: any) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
 
-  return treks.map(toTrek);
+    return treks.map(toTrek);
+  } catch {
+    return [];
+  }
 }
 
 export async function getTrek(slug: string): Promise<Trek | null> {
@@ -78,7 +86,7 @@ export async function createTrek(data: Trek) {
     throw new Error("A trek with this slug already exists");
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/trek`, {
+  const res = await fetch(`${baseUrl}/api/trek`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -111,7 +119,7 @@ export async function createTrek(data: Trek) {
 export async function updateTrek(slug: string, data: Trek) {
   // We need the ID for the PUT request to /api/trek
   const allTreksResponse = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/trek`,
+    `${baseUrl}/api/trek`,
     { cache: "no-store" },
   );
   const allTreks = await allTreksResponse.json();
@@ -120,7 +128,7 @@ export async function updateTrek(slug: string, data: Trek) {
   if (!existing) throw new Error("Trek not found");
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/trek?id=${existing.id}`,
+    `${baseUrl}/api/trek?id=${existing.id}`,
     {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -154,7 +162,7 @@ export async function updateTrek(slug: string, data: Trek) {
 export async function deleteTrek(slug: string) {
   try {
     const allTreksResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/trek`,
+      `${baseUrl}/api/trek`,
       { cache: "no-store" },
     );
     const allTreks = await allTreksResponse.json();
@@ -162,7 +170,7 @@ export async function deleteTrek(slug: string) {
 
     if (existing) {
       await fetch(
-        `${process.env.NEXT_PUBLIC_APP_URL}/api/trek?id=${existing.id}`,
+        `${baseUrl}/api/trek?id=${existing.id}`,
         {
           method: "DELETE",
         },
@@ -183,7 +191,7 @@ export async function logoutAdminAction() {
 
 export async function loginAdmin(email: string, password: string) {
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/login`, {
+    const res = await fetch(`${baseUrl}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
