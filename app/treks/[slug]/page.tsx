@@ -12,6 +12,7 @@ import {
   Check,
   ArrowLeft,
 } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
@@ -38,7 +39,6 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const { prisma } = await import("@/lib/prisma");
   const treks = await prisma.trek.findMany({ select: { slug: true } });
   return treks.map((trek) => ({ slug: trek.slug }));
 }
