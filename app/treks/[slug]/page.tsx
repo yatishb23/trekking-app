@@ -39,8 +39,12 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const treks = await prisma.trek.findMany({ select: { slug: true } });
-  return treks.map((trek: { slug: string }) => ({ slug: trek.slug }));
+  try {
+    const treks = await prisma.trek.findMany({ select: { slug: true } });
+    return treks.map((trek: { slug: string }) => ({ slug: trek.slug }));
+  } catch {
+    return [];
+  }
 }
 
 const difficultyColors: Record<string, string> = {
