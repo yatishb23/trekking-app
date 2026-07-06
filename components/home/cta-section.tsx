@@ -16,53 +16,24 @@ export function CtaSection() {
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
   return (
-    <section ref={containerRef} className="mx-6 mb-8">
-      <div
-        className="relative flex min-h-[420px] items-center overflow-hidden"
-        style={{
-          borderRadius: "36px",
-          boxShadow: "0 20px 60px rgba(196,98,45,0.25)",
-        }}
-      >
+    <section ref={containerRef} className="mx-4 sm:mx-6 mb-16">
+      <div className="relative flex min-h-[420px] items-center overflow-hidden rounded-2xl shadow-sm border border-gray-200">
         {/* Background image with parallax */}
         <motion.div style={{ y }} className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1533240332313-0db49b459ad6?auto=format&fit=crop&q=80&w=2070"
             alt="Mountain summit"
             fill
-            className="object-cover brightness-90"
+            className="object-cover"
             sizes="100vw"
           />
         </motion.div>
 
         {/* Gradient overlay */}
-        <div
-          className="absolute inset-0 z-10"
-          style={{
-            background:
-              "linear-gradient(100deg, rgba(45,20,8,0.82) 0%, rgba(196,98,45,0.6) 55%, transparent 100%)",
-          }}
-        />
-
-        {/* Decorative blobs */}
-        <div
-          className="absolute -right-12 -top-20 z-10 h-96 w-96 rounded-full"
-          style={{
-            background:
-              "radial-gradient(circle, rgba(45,80,22,0.2) 0%, transparent 70%)",
-          }}
-        />
-        <div
-          className="absolute bottom-0 z-10 h-48 w-48 rounded-full"
-          style={{
-            left: "45%",
-            background:
-              "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
-          }}
-        />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
 
         {/* Content */}
-        <div className="relative z-20 px-16 py-20">
+        <div className="relative z-20 px-8 py-20 sm:px-16">
           <div className="max-w-xl">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
@@ -71,14 +42,7 @@ export function CtaSection() {
               transition={{ duration: 0.7 }}
               className="mb-6 flex items-center gap-3"
             >
-              <div
-                className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em]"
-                style={{
-                  background: "rgba(255,255,255,0.15)",
-                  border: "1px solid rgba(255,255,255,0.25)",
-                  color: "rgba(245,240,232,0.9)",
-                }}
-              >
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
                 <Compass className="h-3.5 w-3.5" />
                 Ready for the journey?
               </div>
@@ -89,14 +53,10 @@ export function CtaSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="font-serif text-[54px] font-light leading-[1.06]"
-              style={{ color: "#FDFAF5" }}
+              className="font-serif text-5xl sm:text-6xl font-light leading-tight text-white"
             >
               The Mountains Are{" "}
-              <em
-                className="italic font-light"
-                style={{ color: "rgba(245,240,232,0.55)" }}
-              >
+              <em className="font-light italic text-gray-300">
                 Calling You
               </em>
             </motion.h2>
@@ -106,11 +66,10 @@ export function CtaSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-6 max-w-md text-[15px] font-light leading-relaxed"
-              style={{ color: "rgba(253,250,245,0.75)" }}
+              className="mt-6 text-base text-gray-300 leading-relaxed max-w-md"
             >
-              Whether you are a seasoned trekker or stepping onto a trail for the
-              first time, your perfect expedition starts here.
+              Join a community of explorers and conquer paths unknown.
+              Your next adventure awaits just a click away.
             </motion.p>
 
             <motion.div
@@ -118,34 +77,14 @@ export function CtaSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.45 }}
-              className="mt-10 flex flex-col items-start gap-4 sm:flex-row"
+              className="mt-10"
             >
-              {/* Primary button */}
               <Link
                 href="/treks"
-                className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-[12px] font-bold uppercase tracking-[0.08em] transition-all duration-250 hover:-translate-y-0.5"
-                style={{
-                  background: "linear-gradient(135deg, #F5F0E8, #EDE8DC)",
-                  color: "#2D5016",
-                  boxShadow:
-                    "0 8px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.9)",
-                }}
+                className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:-translate-y-1"
               >
-                Book Your Adventure
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-
-              {/* Ghost button */}
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-2 rounded-full px-8 py-3.5 text-[12px] font-medium transition-all duration-250 hover:bg-white/20"
-                style={{
-                  background: "rgba(255,255,255,0.1)",
-                  border: "1px solid rgba(255,255,255,0.22)",
-                  color: "rgba(245,240,232,0.88)",
-                }}
-              >
-                Inquire Now
+                Start Exploring
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </motion.div>
           </div>

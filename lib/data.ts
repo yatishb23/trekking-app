@@ -6,7 +6,7 @@ export interface Trek {
   difficulty: "Easy" | "Moderate" | "Challenging" | "Extreme"
   altitude: string
   price: number
-  image: string
+  images: string[]
   shortDescription: string
   description: string
   highlights: string[]
@@ -52,7 +52,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "3,842 ft",
     price: 2499,
-    image: "/images/trek-vasota.jpg",
+    images: ["/images/trek-vasota.jpg"],
     shortDescription:
       "Explore the dense jungles of Koyna Wildlife Sanctuary with a thrilling boat ride across the Shivsagar Lake to reach the majestic Vasota Fort.",
     description:
@@ -101,7 +101,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "5,400 ft",
     price: 1299,
-    image: "/images/trek-kalsubai.jpg",
+    images: ["/images/trek-kalsubai.jpg"],
     shortDescription:
       "Conquer the highest peak in Maharashtra with thrilling iron ladder sections and breathtaking 360-degree views of the Sahyadri ranges.",
     description:
@@ -141,7 +141,7 @@ export const treks: Trek[] = [
     difficulty: "Challenging",
     altitude: "4,670 ft",
     price: 2199,
-    image: "/images/trek-harishchandragad.jpg",
+    images: ["/images/trek-harishchandragad.jpg"],
     shortDescription:
       "Visit the legendary Konkan Kada, one of the most dramatic cliff overhangs in the Sahyadris, on this thrilling fort trek.",
     description:
@@ -187,7 +187,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "4,255 ft",
     price: 1499,
-    image: "/images/trek-ratangad.jpg",
+    images: ["/images/trek-ratangad.jpg"],
     shortDescription:
       "A gem in the Bhandardara region with a natural rock window, ancient fort ruins, and stunning views of the Sahyadri ranges and Amriteshwar lake.",
     description:
@@ -224,7 +224,7 @@ export const treks: Trek[] = [
     difficulty: "Easy",
     altitude: "2,710 ft",
     price: 1799,
-    image: "/images/trek-rajmachi.jpg",
+    images: ["/images/trek-rajmachi.jpg"],
     shortDescription:
       "A perfect monsoon trek near Lonavala with twin forts Shrivardhan and Manaranjan, waterfalls, fireflies, and a rustic village stay.",
     description:
@@ -269,7 +269,7 @@ export const treks: Trek[] = [
     difficulty: "Challenging",
     altitude: "3,000 ft",
     price: 2299,
-    image: "/images/gallery-3.jpg",
+    images: ["/images/gallery-3.jpg"],
     shortDescription:
       "Descend into the Valley of Shadows - a narrow canyon with towering cliffs, rappelling sections, and water pools in the heart of the Sahyadris.",
     description:

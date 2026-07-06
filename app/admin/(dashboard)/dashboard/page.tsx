@@ -10,7 +10,7 @@ import Link from "next/link";
 export default async function AdminDashboardPage() {
   const treks = await getTreks();
 
-  const usersRes = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user`, {
+  const usersRes = await fetch(`http://localhost:3000/api/user`, {
     cache: "no-store",
   });
   const users = usersRes.ok ? await usersRes.json() : [];

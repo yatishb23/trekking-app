@@ -58,7 +58,7 @@ ADMIN_EMAIL=admin@mileswithnature.com
 ADMIN_PASSWORD=admin123
 
 # Your PostgreSQL Database URL
-DATABASE_URL="postgresql://user:password@host/database_name?sslmode=require"
+DATABASE_URL="postgresql://user:password@host/database_name?uselibpqcompat=true&sslmode=require"
 
 # Base URL for API calls during localized Dev
 NEXT_PUBLIC_APP_URL="http://localhost:3000"

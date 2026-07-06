@@ -68,7 +68,7 @@ export default async function TrekDetailPage({ params }: TrekPageProps) {
       <main>
         <section className="relative flex min-h-[50vh] items-end overflow-hidden">
           <Image
-            src={trek.image}
+            src={trek.images?.[0] || "https://images.unsplash.com/photo-1522345598166-519b671a171d?auto=format&fit=crop&q=80&w=2070"}
             alt={trek.title}
             fill
             priority
@@ -146,6 +146,27 @@ export default async function TrekDetailPage({ params }: TrekPageProps) {
                     {trek.description}
                   </p>
                 </div>
+
+                {/* Gallery */}
+                {trek.images && trek.images.length > 1 && (
+                  <div className="mt-10">
+                    <h2 className="font-serif text-2xl font-bold text-foreground">
+                      Gallery
+                    </h2>
+                    <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
+                      {trek.images.slice(1).map((img, idx) => (
+                        <div key={idx} className="relative aspect-square overflow-hidden rounded-lg border border-border/60">
+                          <Image
+                            src={img}
+                            alt={`${trek.title} gallery image ${idx + 1}`}
+                            fill
+                            className="object-cover transition-transform hover:scale-105"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Highlights */}
                 <div className="mt-10">

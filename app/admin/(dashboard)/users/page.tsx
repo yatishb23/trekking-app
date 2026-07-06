@@ -2,7 +2,7 @@ import { UsersTable } from "@/components/admin/users-table";
 import { format } from "date-fns";
 
 export default async function AdminUsersPage() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/user`, {
+  const res = await fetch(`http://localhost:3000/api/user`, {
     cache: "no-store",
   });
 

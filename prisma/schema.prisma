@@ -28,7 +28,7 @@ model Trek {
   difficulty       String
   altitude         String
   price            Int
-  image            String   @db.Text
+  images           String[]
   shortDescription String
   description      String
   highlights       String[]

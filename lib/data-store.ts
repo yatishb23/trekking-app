@@ -3,13 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 import { setAdminSession } from "./auth";
-import { verifyAdmin } from "./auth";
 import type { Trek } from "./data";
 import bcrypt from "bcryptjs";
-
-const baseUrl =
-  process.env.NEXT_PUBLIC_APP_URL ||
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
 
 function toTrek(t: {
   id: number;
@@ -20,7 +15,7 @@ function toTrek(t: {
   difficulty: string;
   altitude: string;
   price: number;
-  image: string;
+  images: string[];
   shortDescription: string;
   description: string;
   highlights: string[];
@@ -41,7 +36,7 @@ function toTrek(t: {
     difficulty: t.difficulty as Trek["difficulty"],
     altitude: t.altitude,
     price: t.price,
-    image: t.image,
+    images: t.images,
     shortDescription: t.shortDescription,
     description: t.description,
     highlights: t.highlights,
@@ -87,7 +82,7 @@ export async function createTrek(data: Trek) {
       difficulty: data.difficulty,
       altitude: data.altitude,
       price: data.price,
-      image: data.image,
+      images: data.images,
       shortDescription: data.shortDescription,
       description: data.description,
       highlights: data.highlights ?? [],
@@ -106,7 +101,7 @@ export async function createTrek(data: Trek) {
 
 export async function updateTrek(slug: string, data: Trek) {
   const existing = await prisma.trek.findUnique({
-    where: { slug }
+    where: { slug },
   });
 
   if (!existing) throw new Error("Trek not found");
@@ -120,7 +115,7 @@ export async function updateTrek(slug: string, data: Trek) {
       difficulty: data.difficulty,
       altitude: data.altitude,
       price: data.price,
-      image: data.image,
+      images: data.images,
       shortDescription: data.shortDescription,
       description: data.description,
       highlights: data.highlights ?? [],
@@ -140,15 +135,15 @@ export async function updateTrek(slug: string, data: Trek) {
 export async function deleteTrek(slug: string) {
   try {
     const existing = await prisma.trek.findUnique({
-      where: { slug }
+      where: { slug },
     });
 
     if (existing) {
       await prisma.trek.delete({
-        where: { id: existing.id }
+        where: { id: existing.id },
       });
     }
-  } catch (error) {
+  } catch {
     // catch block
   }
   revalidatePath("/treks");

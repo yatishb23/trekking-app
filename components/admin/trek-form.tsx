@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createTrek, updateTrek } from "@/lib/data-store";
 import type { Trek } from "@/lib/data";
@@ -12,33 +12,38 @@ type State = { error: string | null };
 export function TrekForm({ trek }: { trek?: Trek | null }) {
   const router = useRouter();
   const isEditing = !!trek;
+  const [existingImages, setExistingImages] = useState<string[]>(trek?.images || []);
 
-  // --- Image parsing helper
-  async function parseImage(formData: FormData): Promise<string> {
-    const file = formData.get("image") as File;
-    const existingImagePath = formData.get("existingImage") as string;
+  async function parseImages(formData: FormData): Promise<string[]> {
+    const files = formData.getAll("images") as File[];
+    const parsedImages: string[] = [];
 
-    if (file && file.size > 0) {
-      if (file.size > 5 * 1024 * 1024)
-        throw new Error("Image must be less than 5MB");
-      const buffer = await file.arrayBuffer();
-      const base64 = Buffer.from(buffer).toString("base64");
-      return `data:${file.type};base64,${base64}`;
+    for (const file of files) {
+      if (file && file.size > 0) {
+        if (file.size > 5 * 1024 * 1024)
+          throw new Error(`Image ${file.name} must be less than 5MB`);
+        const buffer = await file.arrayBuffer();
+        const base64 = Buffer.from(buffer).toString("base64");
+        parsedImages.push(`data:${file.type};base64,${base64}`);
+      }
     }
 
-    if (existingImagePath) return existingImagePath;
-    throw new Error("Image is required");
+    return [...existingImages, ...parsedImages];
   }
 
   async function handleSubmit(
     _prev: State,
     formData: FormData,
   ): Promise<State> {
-    let imageString = "";
+    let imagesArray: string[] = [];
     try {
-      imageString = await parseImage(formData);
+      imagesArray = await parseImages(formData);
     } catch (e) {
       return { error: (e as Error).message };
+    }
+
+    if (imagesArray.length === 0) {
+      return { error: "At least one image is required" };
     }
 
     const data: Trek = {
@@ -49,7 +54,7 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
       difficulty: formData.get("difficulty") as Trek["difficulty"],
       altitude: formData.get("altitude") as string,
       price: Number(formData.get("price")),
-      image: imageString,
+      images: imagesArray,
       shortDescription: formData.get("shortDescription") as string,
       description: formData.get("description") as string,
       highlights: (formData.get("highlights") as string)
@@ -86,64 +91,43 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
     }
   }
 
-  const [state, formAction] = useActionState<State, FormData>(handleSubmit, {
+  const [state, formAction, isPending] = useActionState(handleSubmit, {
     error: null,
   });
 
+  const removeExistingImage = (index: number) => {
+    setExistingImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
-    <form action={formAction}>
-      {state.error && (
-        <div
-          className="mb-6 rounded-xl px-4 py-3 text-sm font-medium"
-          style={{
-            background: "rgba(220,80,60,0.1)",
-            color: "#8B1A0A",
-          }}
-        >
+    <form action={formAction} className="mx-auto max-w-4xl space-y-8 rounded-xl bg-white p-8 shadow-sm border border-gray-100">
+      {state?.error && (
+        <div className="rounded-md bg-red-50 p-4 text-sm text-red-600 border border-red-100">
           {state.error}
         </div>
       )}
 
-      <div className="grid gap-8 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
         {/* Left column */}
         <div className="space-y-5">
-          <Field
-            label="Title"
-            name="title"
-            defaultValue={trek?.title}
-            required
-          />
+          <Field label="Title" name="title" defaultValue={trek?.title} required />
           <Field label="Slug" name="slug" defaultValue={trek?.slug} required />
-          <Field
-            label="Location"
-            name="location"
-            defaultValue={trek?.location}
-            required
-          />
+          <Field label="Location" name="location" defaultValue={trek?.location} required />
+
           <div className="grid grid-cols-2 gap-4">
-            <Field
-              label="Duration"
-              name="duration"
-              defaultValue={trek?.duration}
-              required
-            />
-            <Field
-              label="Altitude"
-              name="altitude"
-              defaultValue={trek?.altitude}
-              required
-            />
+            <Field label="Duration" name="duration" defaultValue={trek?.duration} required />
+            <Field label="Altitude" name="altitude" defaultValue={trek?.altitude} required />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
+              <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500">
                 Difficulty
               </label>
               <select
                 name="difficulty"
-                defaultValue={trek?.difficulty ?? "Moderate"}
-                className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] focus:ring-2 focus:ring-[#4A7C3F]"
-                style={{ background: "#FDFAF5", color: "#2C2816" }}
+                defaultValue={trek?.difficulty}
+                className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black focus:ring-1 focus:ring-black"
               >
                 {difficulties.map((d) => (
                   <option key={d} value={d}>
@@ -152,150 +136,62 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
                 ))}
               </select>
             </div>
-            <Field
-              label="Price (₹)"
-              name="price"
-              type="number"
-              defaultValue={trek?.price?.toString()}
-              required
-            />
+            <Field label="Price (₹)" name="price" type="number" defaultValue={trek?.price?.toString()} required />
           </div>
+
           <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Image Upload
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500">
+              Images Upload
             </label>
             <input
-              name="image"
+              name="images"
               type="file"
               accept="image/*"
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{ background: "#FDFAF5", color: "#2C2816" }}
+              multiple
+              className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm outline-none focus:border-black focus:ring-1 focus:ring-black"
             />
-            {trek?.image && (
-              <div className="mt-2 text-xs text-[#8B7355]">
-                Current image uploaded/stored. Selecting a new file will
-                overwrite it.
-                <input type="hidden" name="existingImage" value={trek.image} />
+            {existingImages.length > 0 && (
+              <div className="mt-4">
+                <p className="text-xs text-gray-500 mb-2">Existing Images:</p>
+                <div className="flex flex-wrap gap-2">
+                  {existingImages.map((img, i) => (
+                    <div key={i} className="relative group w-20 h-20 rounded-md overflow-hidden border border-gray-200">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={img} alt={`Preview ${i}`} className="object-cover w-full h-full" />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(i)}
+                        className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
           </div>
-          <Field
-            label="Best Season"
-            name="bestSeason"
-            defaultValue={trek?.bestSeason}
-            required
-          />
-          <Field
-            label="Group Size"
-            name="groupSize"
-            defaultValue={trek?.groupSize}
-            required
-          />
+          
+          <Field label="Best Season" name="bestSeason" defaultValue={trek?.bestSeason} required />
+          <Field label="Group Size" name="groupSize" defaultValue={trek?.groupSize} required />
         </div>
 
         {/* Right column */}
         <div className="space-y-5">
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Short Description
-            </label>
-            <textarea
-              name="shortDescription"
-              defaultValue={trek?.shortDescription}
-              required
-              rows={3}
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{
-                background: "#FDFAF5",
-                color: "#2C2816",
-                resize: "vertical",
-              }}
-            />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Description
-            </label>
-            <textarea
-              name="description"
-              defaultValue={trek?.description}
-              required
-              rows={5}
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{
-                background: "#FDFAF5",
-                color: "#2C2816",
-                resize: "vertical",
-              }}
-            />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Highlights (one per line)
-            </label>
-            <textarea
-              name="highlights"
-              defaultValue={trek?.highlights?.join("\n")}
-              rows={4}
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{
-                background: "#FDFAF5",
-                color: "#2C2816",
-                resize: "vertical",
-              }}
-            />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Includes (one per line)
-            </label>
-            <textarea
-              name="includes"
-              defaultValue={trek?.includes?.join("\n")}
-              rows={4}
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{
-                background: "#FDFAF5",
-                color: "#2C2816",
-                resize: "vertical",
-              }}
-            />
-          </div>
-          <div>
-            <label className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]">
-              Itinerary (description)
-            </label>
-            <textarea
-              name="itinerary"
-              defaultValue={trek?.itinerary?.[0]?.description ?? ""}
-              rows={3}
-              className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-              style={{
-                background: "#FDFAF5",
-                color: "#2C2816",
-                resize: "vertical",
-              }}
-            />
-          </div>
+          <TextAreaField label="Short Description" name="shortDescription" defaultValue={trek?.shortDescription} required rows={3} />
+          <TextAreaField label="Description" name="description" defaultValue={trek?.description} required rows={5} />
+          <TextAreaField label="Highlights (one per line)" name="highlights" defaultValue={trek?.highlights?.join("\n")} rows={4} />
+          <TextAreaField label="Includes (one per line)" name="includes" defaultValue={trek?.includes?.join("\n")} rows={4} />
+          <TextAreaField label="Itinerary (description)" name="itinerary" defaultValue={trek?.itinerary?.[0]?.description ?? ""} rows={3} />
 
           {/* Toggles */}
           <div className="flex gap-6 pt-2">
-            <label className="flex items-center gap-2 text-sm text-[#2D5016]">
-              <input
-                type="checkbox"
-                name="featured"
-                defaultChecked={trek?.featured}
-                className="h-4 w-4 rounded accent-[#4A7C3F]"
-              />
+            <label className="flex items-center gap-2 text-sm text-gray-700 font-medium">
+              <input type="checkbox" name="featured" defaultChecked={trek?.featured} className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black" />
               Featured
             </label>
-            <label className="flex items-center gap-2 text-sm text-[#2D5016]">
-              <input
-                type="checkbox"
-                name="upcoming"
-                defaultChecked={trek?.upcoming}
-                className="h-4 w-4 rounded accent-[#C4622D]"
-              />
+            <label className="flex items-center gap-2 text-sm text-gray-700 font-medium">
+              <input type="checkbox" name="upcoming" defaultChecked={trek?.upcoming} className="h-4 w-4 rounded border-gray-300 text-black focus:ring-black" />
               Upcoming
             </label>
           </div>
@@ -303,17 +199,18 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
       </div>
 
       {/* Submit */}
-      <div className="mt-10 flex items-center gap-4">
+      <div className="mt-8 flex items-center gap-4 pt-4 border-t border-gray-100">
         <button
           type="submit"
-          className="btn-clay-primary rounded-full px-8 py-3 text-xs"
+          disabled={isPending}
+          className="rounded-md bg-black px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-50"
         >
-          {isEditing ? "Update Trek" : "Create Trek"}
+          {isPending ? "Saving..." : isEditing ? "Update Trek" : "Create Trek"}
         </button>
         <button
           type="button"
           onClick={() => router.back()}
-          className="rounded-full px-6 py-3 text-xs font-bold uppercase tracking-widest text-[#8B7355] transition-colors hover:text-[#2D5016]"
+          className="rounded-md px-4 py-2.5 text-sm font-semibold text-gray-500 hover:text-black transition-colors"
         >
           Cancel
         </button>
@@ -322,25 +219,10 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
   );
 }
 
-function Field({
-  label,
-  name,
-  defaultValue,
-  type = "text",
-  required = false,
-}: {
-  label: string;
-  name: string;
-  defaultValue?: string;
-  type?: string;
-  required?: boolean;
-}) {
+function Field({ label, name, defaultValue, type = "text", required = false }: any) {
   return (
     <div>
-      <label
-        htmlFor={name}
-        className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]"
-      >
+      <label htmlFor={name} className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500">
         {label}
       </label>
       <input
@@ -349,8 +231,25 @@ function Field({
         type={type}
         defaultValue={defaultValue}
         required={required}
-        className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] placeholder:text-[#B8A88A] transition-all focus:ring-2 focus:ring-[#4A7C3F]"
-        style={{ background: "#FDFAF5", color: "#2C2816" }}
+        className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-black focus:ring-1 focus:ring-black"
+      />
+    </div>
+  );
+}
+
+function TextAreaField({ label, name, defaultValue, required = false, rows = 3 }: any) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-gray-500">
+        {label}
+      </label>
+      <textarea
+        name={name}
+        defaultValue={defaultValue}
+        required={required}
+        rows={rows}
+        className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm outline-none transition-colors focus:border-black focus:ring-1 focus:ring-black"
+        style={{ resize: "vertical" }}
       />
     </div>
   );
