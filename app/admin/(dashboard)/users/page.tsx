@@ -1,8 +1,10 @@
 import { UsersTable } from "@/components/admin/users-table";
 import { format } from "date-fns";
+import { getServerBaseUrl } from "@/lib/server-url";
 
 export default async function AdminUsersPage() {
-  const res = await fetch(`http://localhost:3000/api/user`, {
+  const baseUrl = await getServerBaseUrl();
+  const res = await fetch(`${baseUrl}/api/user`, {
     cache: "no-store",
   });
 

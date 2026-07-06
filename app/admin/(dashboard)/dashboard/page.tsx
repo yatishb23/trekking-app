@@ -6,11 +6,13 @@ import {
   IndianRupee,
 } from "lucide-react";
 import Link from "next/link";
+import { getServerBaseUrl } from "@/lib/server-url";
 
 export default async function AdminDashboardPage() {
   const treks = await getTreks();
+  const baseUrl = await getServerBaseUrl();
 
-  const usersRes = await fetch(`http://localhost:3000/api/user`, {
+  const usersRes = await fetch(`${baseUrl}/api/user`, {
     cache: "no-store",
   });
   const users = usersRes.ok ? await usersRes.json() : [];
