@@ -5,6 +5,7 @@ import { prisma } from "./prisma";
 import { setAdminSession } from "./auth";
 import { verifyAdmin } from "./auth";
 import type { Trek } from "./data";
+import bcrypt from "bcryptjs";
 
 const baseUrl =
   process.env.NEXT_PUBLIC_APP_URL ||
@@ -55,18 +56,9 @@ function toTrek(t: {
 
 export async function getTreks(): Promise<Trek[]> {
   try {
-    const res = await fetch(`${baseUrl}/api/trek`, {
-      cache: "no-store",
+    const treks = await prisma.trek.findMany({
+      orderBy: { createdAt: "desc" },
     });
-    if (!res.ok) return [];
-    let treks = await res.json();
-
-    // Try sorting newly fetched manually since API did not provide orderBy
-    treks = treks.sort(
-      (a: any, b: any) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    );
-
     return treks.map(toTrek);
   } catch {
     return [];
@@ -86,10 +78,8 @@ export async function createTrek(data: Trek) {
     throw new Error("A trek with this slug already exists");
   }
 
-  const res = await fetch(`${baseUrl}/api/trek`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
+  await prisma.trek.create({
+    data: {
       slug: data.slug,
       title: data.title,
       location: data.location,
@@ -107,53 +97,41 @@ export async function createTrek(data: Trek) {
       includes: data.includes ?? [],
       featured: data.featured ?? false,
       upcoming: data.upcoming ?? false,
-    }),
+    },
   });
-
-  if (!res.ok) throw new Error("Failed to create trek");
 
   revalidatePath("/treks");
   revalidatePath("/admin/(dashboard)/treks");
 }
 
 export async function updateTrek(slug: string, data: Trek) {
-  // We need the ID for the PUT request to /api/trek
-  const allTreksResponse = await fetch(
-    `${baseUrl}/api/trek`,
-    { cache: "no-store" },
-  );
-  const allTreks = await allTreksResponse.json();
-  const existing = allTreks.find((t: any) => t.slug === slug);
+  const existing = await prisma.trek.findUnique({
+    where: { slug }
+  });
 
   if (!existing) throw new Error("Trek not found");
 
-  const res = await fetch(
-    `${baseUrl}/api/trek?id=${existing.id}`,
-    {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: data.title,
-        location: data.location,
-        duration: data.duration,
-        difficulty: data.difficulty,
-        altitude: data.altitude,
-        price: data.price,
-        image: data.image,
-        shortDescription: data.shortDescription,
-        description: data.description,
-        highlights: data.highlights ?? [],
-        itinerary: data.itinerary ?? [],
-        bestSeason: data.bestSeason,
-        groupSize: data.groupSize,
-        includes: data.includes ?? [],
-        featured: data.featured ?? false,
-        upcoming: data.upcoming ?? false,
-      }),
+  await prisma.trek.update({
+    where: { id: existing.id },
+    data: {
+      title: data.title,
+      location: data.location,
+      duration: data.duration,
+      difficulty: data.difficulty,
+      altitude: data.altitude,
+      price: data.price,
+      image: data.image,
+      shortDescription: data.shortDescription,
+      description: data.description,
+      highlights: data.highlights ?? [],
+      itinerary: data.itinerary ?? [],
+      bestSeason: data.bestSeason,
+      groupSize: data.groupSize,
+      includes: data.includes ?? [],
+      featured: data.featured ?? false,
+      upcoming: data.upcoming ?? false,
     },
-  );
-
-  if (!res.ok) throw new Error("Failed to update trek");
+  });
 
   revalidatePath("/treks");
   revalidatePath("/admin/(dashboard)/treks");
@@ -161,20 +139,14 @@ export async function updateTrek(slug: string, data: Trek) {
 
 export async function deleteTrek(slug: string) {
   try {
-    const allTreksResponse = await fetch(
-      `${baseUrl}/api/trek`,
-      { cache: "no-store" },
-    );
-    const allTreks = await allTreksResponse.json();
-    const existing = allTreks.find((t: any) => t.slug === slug);
+    const existing = await prisma.trek.findUnique({
+      where: { slug }
+    });
 
     if (existing) {
-      await fetch(
-        `${baseUrl}/api/trek?id=${existing.id}`,
-        {
-          method: "DELETE",
-        },
-      );
+      await prisma.trek.delete({
+        where: { id: existing.id }
+      });
     }
   } catch (error) {
     // catch block
@@ -191,27 +163,28 @@ export async function logoutAdminAction() {
 
 export async function loginAdmin(email: string, password: string) {
   try {
-    const res = await fetch(`${baseUrl}/api/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+    const user = await prisma.user.findUnique({
+      where: { email },
     });
 
-    if (res.ok) {
-      const user = await res.json();
-      if (user.isAdmin) {
-        await setAdminSession();
-        return { success: true };
-      }
-      return { success: false, error: "Access denied. Not an admin." };
+    if (!user) {
+      return { success: false, error: "Invalid email or password" };
     }
 
-    const errData = await res.json();
-    return {
-      success: false,
-      error: errData.error || "Invalid email or password",
-    };
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if (!isPasswordValid) {
+      return { success: false, error: "Invalid email or password" };
+    }
+
+    if (user.isAdmin) {
+      await setAdminSession();
+      return { success: true };
+    }
+
+    return { success: false, error: "Access denied. Not an admin." };
   } catch (error) {
+    console.error("Login Error:", error);
     return { success: false, error: "Internal server error" };
   }
 }
