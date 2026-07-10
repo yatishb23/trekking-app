@@ -58,7 +58,7 @@ const initialTreks = [
     difficulty: "Moderate",
     altitude: "5,400 ft",
     price: 1499,
-    image: "/images/trek-kalsubai.jpg",
+    image: "/kalsubai.webp",
     shortDescription:
       "Conquer Maharashtra's highest peak — a thrilling overnight trek to the roof of the Sahyadris.",
     description:
@@ -98,7 +98,7 @@ const initialTreks = [
     difficulty: "Challenging",
     altitude: "4,671 ft",
     price: 1999,
-    image: "/images/trek-harishchandragad.jpg",
+    image: "/harishchandra.jpg",
     shortDescription:
       "Ancient fort with caves, waterfalls, and the famous Konkan Kada cliff.",
     description:
@@ -144,7 +144,7 @@ const initialTreks = [
     difficulty: "Moderate",
     altitude: "4,250 ft",
     price: 1299,
-    image: "/images/trek-ratangad.jpg",
+    image: "/ratangad.jpeg",
     shortDescription:
       "A historic fort with a natural rock arch and stunning views of the surrounding ranges.",
     description:
@@ -183,7 +183,7 @@ const initialTreks = [
     difficulty: "Easy",
     altitude: "2,710 ft",
     price: 999,
-    image: "/images/trek-rajmachi.jpg",
+    image: "/rajmachi.webp",
     shortDescription:
       "A scenic trek near Lonavala with lush green landscapes and twin fort ruins.",
     description:
@@ -222,7 +222,7 @@ const initialTreks = [
     difficulty: "Extreme",
     altitude: "4,200 ft",
     price: 2999,
-    image: "/images/trek-sandhan.jpg",
+    image: "/sandhan.webp",
     shortDescription:
       "Also known as the Valley of Shadows — a thrilling canyon trek with rappelling.",
     description:
@@ -278,7 +278,12 @@ async function main() {
 
   await prisma.user.upsert({
     where: { email: adminUser.email },
-    update: {},
+    update: {
+      name: adminUser.name,
+      phone: adminUser.phone,
+      password: hashedPassword,
+      isAdmin: true,
+    },
     create: {
       name: adminUser.name,
       email: adminUser.email,
@@ -291,10 +296,16 @@ async function main() {
   console.log("Admin user created.");
 
   for (const trek of initialTreks) {
+    const { image, ...rest } = trek;
+    const trekPayload = {
+      ...rest,
+      images: [image],
+    };
+
     await prisma.trek.upsert({
       where: { slug: trek.slug },
-      update: {},
-      create: trek,
+      update: trekPayload,
+      create: trekPayload,
     });
   }
 

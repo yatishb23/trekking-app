@@ -4,8 +4,6 @@ import Link from "next/link"
 import { ArrowRight, Mountain, Heart, TreePine, Users } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { SectionHeader } from "@/components/section-header"
-import { Button } from "@/components/ui/button"
 
 export const metadata: Metadata = {
   title: "About Us | Miles With Nature",
@@ -51,26 +49,26 @@ export default function AboutPage() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="bg-white">
         {/* Hero */}
-        <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden">
+        <section className="relative flex min-h-[50vh] items-center justify-center overflow-hidden bg-stone-900 sm:min-h-[60vh]">
           <Image
             src="/images/about-team.jpg"
             alt="Our trekking team at a campsite"
             fill
             priority
-            className="object-cover"
+            className="object-cover opacity-40"
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="relative z-10 mx-auto max-w-3xl px-4 text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-white/80">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+          <div className="relative z-10 mx-auto max-w-4xl px-6 text-center mt-20">
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/80 backdrop-blur-md">
               Our Story
-            </p>
-            <h1 className="mt-4 text-balance font-serif text-4xl font-bold text-white sm:text-5xl">
-              Miles With Nature
+            </span>
+            <h1 className="text-5xl font-light tracking-tight text-white sm:text-6xl md:text-7xl" style={{ fontFamily: "var(--font-playfair)" }}>
+              Miles With <em className="italic text-stone-400">Nature</em>
             </h1>
-            <p className="mx-auto mt-4 max-w-xl text-pretty leading-relaxed text-white/80">
+            <p className="mx-auto mt-6 max-w-2xl text-lg font-light leading-relaxed text-white/60 sm:text-xl">
               Born from a love for the mountains and a desire to share the magic
               of the trails with fellow adventurers.
             </p>
@@ -78,16 +76,17 @@ export default function AboutPage() {
         </section>
 
         {/* Our Story */}
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="grid items-center gap-16 lg:grid-cols-2">
+        <section className="py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               <div>
-                <SectionHeader
-                  label="Who We Are"
-                  title="A Team of Mountain Enthusiasts"
-                  align="left"
-                />
-                <div className="mt-6 flex flex-col gap-4 text-sm leading-relaxed text-muted-foreground">
+                <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">
+                  Who We Are
+                </span>
+                <h2 className="mt-4 text-4xl font-light tracking-tight text-zinc-900 sm:text-5xl" style={{ fontFamily: "var(--font-playfair)" }}>
+                  A Team of Mountain <em className="italic text-stone-400">Enthusiasts</em>
+                </h2>
+                <div className="mt-8 flex flex-col gap-5 text-base font-light leading-relaxed text-stone-500">
                   <p>
                     Miles With Nature was founded with a simple belief: the
                     mountains have the power to transform lives. What started as
@@ -109,13 +108,14 @@ export default function AboutPage() {
                     than we found them.
                   </p>
                 </div>
-                <Button asChild className="mt-8 gap-2">
-                  <Link href="/treks">
-                    See Our Treks <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
+                <Link
+                  href="/treks"
+                  className="mt-10 inline-flex items-center gap-2.5 rounded-xl bg-zinc-950 px-8 py-3.5 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl hover:shadow-zinc-950/20 hover:-translate-y-0.5"
+                >
+                  See Our Treks <ArrowRight className="h-4 w-4" />
+                </Link>
               </div>
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-stone-100">
                 <Image
                   src="/images/gallery-2.jpg"
                   alt="Campsite in mountain valley at dusk"
@@ -129,15 +129,15 @@ export default function AboutPage() {
         </section>
 
         {/* Stats */}
-        <section className="border-y bg-muted/50 py-16">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
+        <section className="border-y border-stone-200 bg-stone-50 py-20 sm:py-24">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="grid grid-cols-2 gap-10 lg:grid-cols-4">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <p className="font-serif text-3xl font-bold text-primary sm:text-4xl">
+                  <p className="text-4xl font-light text-zinc-900 sm:text-5xl lg:text-6xl" style={{ fontFamily: "var(--font-playfair)" }}>
                     {stat.value}
                   </p>
-                  <p className="mt-1 text-sm text-muted-foreground">
+                  <p className="mt-3 text-[11px] font-bold uppercase tracking-[0.2em] text-stone-400">
                     {stat.label}
                   </p>
                 </div>
@@ -147,26 +147,33 @@ export default function AboutPage() {
         </section>
 
         {/* Values */}
-        <section className="py-24">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <SectionHeader
-              label="Our Values"
-              title="What Drives Us Forward"
-              description="These core principles guide every decision we make and every trail we choose."
-            />
-            <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <section className="py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-stone-50 px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">
+                Our Values
+              </span>
+              <h2 className="mt-4 text-4xl font-light tracking-tight text-zinc-900 sm:text-5xl" style={{ fontFamily: "var(--font-playfair)" }}>
+                What Drives Us <em className="italic text-stone-400">Forward</em>
+              </h2>
+              <p className="mt-5 text-lg font-light leading-relaxed text-stone-500">
+                These core principles guide every decision we make and every trail we choose.
+              </p>
+            </div>
+
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {values.map((value) => (
                 <div
                   key={value.title}
-                  className="rounded-xl border border-border/60 bg-card p-6"
+                  className="group flex flex-col rounded-2xl border border-stone-200 bg-stone-50 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-zinc-950 hover:bg-zinc-950 hover:shadow-2xl hover:shadow-zinc-950/20 sm:p-8"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
-                    <value.icon className="h-6 w-6 text-primary" />
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl border border-stone-200 bg-white transition-all duration-500 group-hover:border-white/10 group-hover:bg-white/10">
+                    <value.icon className="h-5 w-5 text-zinc-900 transition-colors duration-500 group-hover:text-white" />
                   </div>
-                  <h3 className="mt-4 font-serif text-lg font-semibold text-foreground">
+                  <h3 className="text-lg font-medium text-zinc-900 transition-colors duration-500 group-hover:text-white" style={{ fontFamily: "var(--font-playfair)" }}>
                     {value.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-3 flex-auto text-sm font-light leading-relaxed text-stone-500 transition-colors duration-500 group-hover:text-stone-300">
                     {value.description}
                   </p>
                 </div>
@@ -176,14 +183,21 @@ export default function AboutPage() {
         </section>
 
         {/* Team Section */}
-        <section className="bg-muted/30 py-24">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <SectionHeader
-              label="The Team"
-              title="Meet Our Expert Guides"
-              description="Our experienced leaders ensure your safety and make every trek memorable."
-            />
-            <div className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <section className="bg-stone-50 border-y border-stone-200 py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mx-auto max-w-2xl text-center mb-16">
+              <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900 shadow-sm">
+                The Team
+              </span>
+              <h2 className="mt-4 text-4xl font-light tracking-tight text-zinc-900 sm:text-5xl" style={{ fontFamily: "var(--font-playfair)" }}>
+                Meet Our Expert <em className="italic text-stone-400">Guides</em>
+              </h2>
+              <p className="mt-5 text-lg font-light leading-relaxed text-stone-500">
+                Our experienced leaders ensure your safety and make every trek memorable.
+              </p>
+            </div>
+
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
                   name: "Sagar Shinde",
@@ -204,19 +218,20 @@ export default function AboutPage() {
                   bio: "Expert in navigation and historical knowledge of Maratha forts.",
                 },
               ].map((member) => (
-                <div key={member.name} className="group overflow-hidden rounded-2xl bg-card border border-border/60">
-                  <div className="relative aspect-[4/5]">
+                <div key={member.name} className="group overflow-hidden rounded-2xl border border-stone-200 bg-white transition-all duration-500 hover:shadow-xl hover:shadow-stone-200/60">
+                  <div className="relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={member.image}
                       alt={member.name}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                   </div>
-                  <div className="p-6">
-                    <h3 className="font-serif text-xl font-bold">{member.name}</h3>
-                    <p className="text-sm font-medium text-primary">{member.role}</p>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                    <h3 className="text-xl font-medium text-white" style={{ fontFamily: "var(--font-playfair)" }}>{member.name}</h3>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.15em] text-stone-300">{member.role}</p>
+                    <p className="mt-3 text-sm font-light leading-relaxed text-stone-300/80 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
                       {member.bio}
                     </p>
                   </div>

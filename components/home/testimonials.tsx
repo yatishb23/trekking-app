@@ -6,49 +6,22 @@ import { testimonials } from "@/lib/data";
 
 export function Testimonials() {
   return (
-    <section
-      className="relative mx-6 mb-8 overflow-hidden px-12 py-14"
-      style={{
-        background: "linear-gradient(160deg, #2D5016 0%, #1A3008 100%)",
-        borderRadius: "36px",
-        boxShadow:
-          "0 20px 60px rgba(45,80,22,0.35), inset 0 1px 0 rgba(184,212,170,0.15)",
-      }}
-    >
-      {/* Large decorative quote */}
-      <div
-        className="pointer-events-none absolute -top-10 left-0 select-none font-serif leading-none"
-        style={{
-          fontSize: "260px",
-          color: "rgba(184,212,170,0.04)",
-        }}
-      >
-        "
-      </div>
-
-      <div className="relative z-10">
+    <section className="mx-4 sm:mx-6 lg:mx-8 mb-12 sm:mb-16 overflow-hidden rounded-3xl bg-stone-50 border border-stone-200 px-6 py-20 sm:px-12 lg:px-20">
+      <div className="mx-auto max-w-7xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7 }}
+          className="mb-16"
         >
-          <span
-            className="mb-3 inline-block rounded-full px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em]"
-            style={{
-              background: "rgba(184,212,170,0.12)",
-              color: "#B8D4AA",
-            }}
-          >
+          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900 shadow-sm">
             Community Stories
           </span>
-          <h2
-            className="mb-10 font-serif text-[38px] font-light leading-tight"
-            style={{ color: "#F5F0E8" }}
-          >
+          <h2 className="text-4xl font-light tracking-tight text-zinc-900 sm:text-5xl" style={{ fontFamily: "var(--font-playfair)" }}>
             Echoes of{" "}
-            <em className="italic font-light" style={{ color: "#B8D4AA" }}>
+            <em className="font-light italic text-stone-400">
               Adventure
             </em>
           </h2>
@@ -59,97 +32,53 @@ export function Testimonials() {
           {testimonials.slice(0, 6).map((item, index) => (
             <motion.div
               key={item.name}
-              initial={{ opacity: 0, y: 28 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1, duration: 0.55 }}
-              className="flex flex-col justify-between"
-              style={{
-                background: "rgba(255,255,255,0.07)",
-                border: "1px solid rgba(184,212,170,0.15)",
-                borderRadius: "28px",
-                padding: "28px",
-                backdropFilter: "blur(10px)",
-                boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
-                transition: "all 0.3s",
-                cursor: "default",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.background =
-                  "rgba(255,255,255,0.11)";
-                (e.currentTarget as HTMLElement).style.borderColor =
-                  "rgba(184,212,170,0.3)";
-                (e.currentTarget as HTMLElement).style.transform =
-                  "translateY(-3px)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.background =
-                  "rgba(255,255,255,0.07)";
-                (e.currentTarget as HTMLElement).style.borderColor =
-                  "rgba(184,212,170,0.15)";
-                (e.currentTarget as HTMLElement).style.transform = "";
-              }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: index * 0.08, duration: 0.6, ease: "easeOut" }}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-stone-200 bg-white p-7 transition-all duration-300 hover:shadow-lg hover:shadow-stone-200/50 hover:-translate-y-0.5 sm:p-8"
             >
-              {/* Stars */}
-              <div className="mb-4 flex gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span
-                    key={i}
-                    className={cn(
-                      "text-[13px]",
-                      i < item.rating
-                        ? "text-[#E8935A]"
-                        : "opacity-20 text-[#E8935A]"
-                    )}
-                  >
-                    ★
-                  </span>
-                ))}
+              {/* Decorative Quote */}
+              <div className="pointer-events-none absolute -right-4 -top-8 text-[160px] leading-none text-stone-100 select-none transition-transform duration-500 group-hover:scale-110" style={{ fontFamily: "var(--font-playfair)" }}>
+                &ldquo;
               </div>
 
-              {/* Quote mark */}
-              <div
-                className="mb-2 font-serif text-5xl leading-none"
-                style={{ color: "rgba(184,212,170,0.2)" }}
-              >
-                "
-              </div>
-
-              {/* Quote text */}
-              <blockquote
-                className="flex-1 font-serif text-[15px] font-light italic leading-relaxed"
-                style={{ color: "rgba(245,240,232,0.85)" }}
-              >
-                {item.quote}
-              </blockquote>
-
-              {/* Author */}
-              <div
-                className="mt-6 flex items-center gap-3 pt-5"
-                style={{ borderTop: "1px solid rgba(184,212,170,0.12)" }}
-              >
-                <div
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-[13px] font-bold text-white"
-                  style={{
-                    background: "linear-gradient(135deg, #7BAF6E, #4A7C3F)",
-                    boxShadow: "0 3px 10px rgba(0,0,0,0.2)",
-                  }}
-                >
-                  {item.initials}
+              <div className="relative z-10">
+                {/* Stars */}
+                <div className="mb-5 flex gap-0.5">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "text-sm",
+                        i < item.rating
+                          ? "text-amber-400"
+                          : "text-stone-200"
+                      )}
+                    >
+                      &#9733;
+                    </span>
+                  ))}
                 </div>
-                <div>
-                  <p
-                    className="text-[13px] font-semibold"
-                    style={{ color: "#F5F0E8" }}
-                  >
-                    {item.name}
-                  </p>
-                  <p
-                    className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.15em]"
-                    style={{ color: "rgba(184,212,170,0.6)" }}
-                  >
-                    {item.trek}
-                  </p>
+
+                {/* Quote */}
+                <blockquote className="min-h-[80px] text-sm font-light italic leading-relaxed text-stone-500 sm:min-h-[100px] sm:text-base" style={{ fontFamily: "var(--font-playfair)" }}>
+                  &ldquo;{item.quote}&rdquo;
+                </blockquote>
+
+                {/* Author */}
+                <div className="mt-6 flex items-center gap-3.5 border-t border-stone-100 pt-5 sm:mt-8">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-xs font-bold text-white transition-transform duration-300 group-hover:scale-105">
+                    {item.initials}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-zinc-900">
+                      {item.name}
+                    </p>
+                    <p className="mt-0.5 text-[10px] font-bold uppercase tracking-[0.15em] text-stone-400">
+                      {item.trek}
+                    </p>
+                  </div>
                 </div>
               </div>
             </motion.div>

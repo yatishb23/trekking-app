@@ -15,7 +15,7 @@ const playfair = Playfair_Display({
 
 export const metadata = {
   title: "Miles with Nature",
-  description: "Explore Maharashtra’s finest treks.",
+  description: "Explore Maharashtra's finest treks.",
 };
 
 export default function RootLayout({
@@ -24,9 +24,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} font-sans antialiased`}
+        className={`${inter.variable} ${playfair.variable} font-sans antialiased overflow-x-hidden`}
       >
         {children}
       </body>

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "./prisma";
 import { setAdminSession } from "./auth";
-import type { Trek } from "./data";
+import type { Trek, GalleryImage } from "./data";
 import bcrypt from "bcryptjs";
 
 function toTrek(t: {
@@ -55,6 +55,19 @@ export async function getTreks(): Promise<Trek[]> {
       orderBy: { createdAt: "desc" },
     });
     return treks.map(toTrek);
+  } catch (error) {
+    console.error("Failed to fetch treks from database:", error);
+    return [];
+  }
+}
+
+export async function getTrekTitles(): Promise<string[]> {
+  try {
+    const treks = await prisma.trek.findMany({
+      select: { title: true },
+      orderBy: { title: "asc" },
+    });
+    return treks.map((t) => t.title);
   } catch {
     return [];
   }
@@ -182,4 +195,96 @@ export async function loginAdmin(email: string, password: string) {
     console.error("Login Error:", error);
     return { success: false, error: "Internal server error" };
   }
+}
+
+// ─── Gallery Actions ────────────────────────────────────────────────
+
+function toGalleryImage(g: {
+  id: number;
+  title: string;
+  description: string;
+  imageUrl: string;
+  category: string;
+  trekName: string;
+  story: string;
+  featured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}): GalleryImage {
+  return {
+    id: g.id,
+    src: g.imageUrl,
+    alt: g.title,
+    category: g.category,
+    trekName: g.trekName || undefined,
+    story: g.story || undefined,
+    featured: g.featured,
+    createdAt: g.createdAt,
+    updatedAt: g.updatedAt,
+  };
+}
+
+export async function getGalleryImages(): Promise<GalleryImage[]> {
+  try {
+    const images = await prisma.galleryImage.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+    return images.map(toGalleryImage);
+  } catch (error) {
+    console.error("Failed to fetch gallery images:", error);
+    return [];
+  }
+}
+
+export async function getGalleryImage(id: number): Promise<GalleryImage | null> {
+  try {
+    const image = await prisma.galleryImage.findUnique({ where: { id } });
+    return image ? toGalleryImage(image) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function createGalleryImage(data: {
+  title: string;
+  description: string;
+  imageUrl: string;
+  category: string;
+  trekName: string;
+  story: string;
+  featured: boolean;
+}) {
+  await prisma.galleryImage.create({ data });
+  revalidatePath("/gallery");
+  revalidatePath("/admin/(dashboard)/gallery");
+}
+
+export async function updateGalleryImage(
+  id: number,
+  data: {
+    title: string;
+    description: string;
+    imageUrl: string;
+    category: string;
+    trekName: string;
+    story: string;
+    featured: boolean;
+  }
+) {
+  const existing = await prisma.galleryImage.findUnique({ where: { id } });
+  if (!existing) throw new Error("Gallery image not found");
+
+  await prisma.galleryImage.update({ where: { id }, data });
+  revalidatePath("/gallery");
+  revalidatePath("/admin/(dashboard)/gallery");
+}
+
+export async function deleteGalleryImage(id: number) {
+  try {
+    await prisma.galleryImage.delete({ where: { id } });
+  } catch {
+    // Image might not exist
+  }
+  revalidatePath("/gallery");
+  revalidatePath("/admin/(dashboard)/gallery");
 }

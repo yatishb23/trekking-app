@@ -1,46 +1,52 @@
 export interface Trek {
-  slug: string
-  title: string
-  location: string
-  duration: string
-  difficulty: "Easy" | "Moderate" | "Challenging" | "Extreme"
-  altitude: string
-  price: number
-  images: string[]
-  shortDescription: string
-  description: string
-  highlights: string[]
-  itinerary: { day: number; title: string; description: string }[]
-  bestSeason: string
-  groupSize: string
-  includes: string[]
-  featured?: boolean
-  upcoming?: boolean
+  slug: string;
+  title: string;
+  location: string;
+  duration: string;
+  difficulty: "Easy" | "Moderate" | "Challenging" | "Extreme";
+  altitude: string;
+  price: number;
+  images: string[];
+  shortDescription: string;
+  description: string;
+  highlights: string[];
+  itinerary: { day: number; title: string; description: string }[];
+  bestSeason: string;
+  groupSize: string;
+  includes: string[];
+  featured?: boolean;
+  upcoming?: boolean;
 }
 
 export interface BlogPost {
-  slug: string
-  title: string
-  excerpt: string
-  content: string
-  author: string
-  date: string
-  image: string
-  category: string
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  author: string;
+  date: string;
+  image: string;
+  category: string;
 }
 
 export interface GalleryImage {
-  src: string
-  alt: string
-  category: string
+  id?: number;
+  src: string;
+  alt: string;
+  category: string;
+  trekName?: string;
+  story?: string;
+  featured?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface Testimonial {
-  name: string
-  initials: string
-  trek: string
-  rating: number
-  quote: string
+  name: string;
+  initials: string;
+  trek: string;
+  rating: number;
+  quote: string;
 }
 
 export const treks: Trek[] = [
@@ -52,7 +58,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "3,842 ft",
     price: 2499,
-    images: ["/images/trek-vasota.jpg"],
+    images: ["/vasota.webp"],
     shortDescription:
       "Explore the dense jungles of Koyna Wildlife Sanctuary with a thrilling boat ride across the Shivsagar Lake to reach the majestic Vasota Fort.",
     description:
@@ -101,7 +107,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "5,400 ft",
     price: 1299,
-    images: ["/images/trek-kalsubai.jpg"],
+    images: ["/kalsubai.webp"],
     shortDescription:
       "Conquer the highest peak in Maharashtra with thrilling iron ladder sections and breathtaking 360-degree views of the Sahyadri ranges.",
     description:
@@ -141,7 +147,7 @@ export const treks: Trek[] = [
     difficulty: "Challenging",
     altitude: "4,670 ft",
     price: 2199,
-    images: ["/images/trek-harishchandragad.jpg"],
+    images: ["/harishchandra.jpg"],
     shortDescription:
       "Visit the legendary Konkan Kada, one of the most dramatic cliff overhangs in the Sahyadris, on this thrilling fort trek.",
     description:
@@ -187,7 +193,7 @@ export const treks: Trek[] = [
     difficulty: "Moderate",
     altitude: "4,255 ft",
     price: 1499,
-    images: ["/images/trek-ratangad.jpg"],
+    images: ["/ratangad.jpeg"],
     shortDescription:
       "A gem in the Bhandardara region with a natural rock window, ancient fort ruins, and stunning views of the Sahyadri ranges and Amriteshwar lake.",
     description:
@@ -224,7 +230,7 @@ export const treks: Trek[] = [
     difficulty: "Easy",
     altitude: "2,710 ft",
     price: 1799,
-    images: ["/images/trek-rajmachi.jpg"],
+    images: ["/rajmachi.webp"],
     shortDescription:
       "A perfect monsoon trek near Lonavala with twin forts Shrivardhan and Manaranjan, waterfalls, fireflies, and a rustic village stay.",
     description:
@@ -269,7 +275,7 @@ export const treks: Trek[] = [
     difficulty: "Challenging",
     altitude: "3,000 ft",
     price: 2299,
-    images: ["/images/gallery-3.jpg"],
+    images: ["/sandhan.webp"],
     shortDescription:
       "Descend into the Valley of Shadows - a narrow canyon with towering cliffs, rappelling sections, and water pools in the heart of the Sahyadris.",
     description:
@@ -307,7 +313,7 @@ export const treks: Trek[] = [
       "First aid & safety equipment",
     ],
   },
-]
+];
 
 export const blogPosts: BlogPost[] = [
   {
@@ -330,7 +336,7 @@ export const blogPosts: BlogPost[] = [
 **Safety**: Always trek in a group. Inform someone about your trek plan. Avoid standing near cliff edges - rocks can be extremely slippery. Start early and finish before dark.`,
     author: "Sachin Patil",
     date: "2025-12-15",
-    image: "/images/trek-rajmachi.jpg",
+    image: "/rajmachi.webp",
     category: "Trek Guide",
   },
   {
@@ -363,7 +369,7 @@ export const blogPosts: BlogPost[] = [
 The Bhandardara and Igatpuri regions in Nashik are easily accessible from both Pune and Mumbai, making them perfect for weekend adventures.`,
     author: "Priya Deshmukh",
     date: "2025-11-28",
-    image: "/images/trek-kalsubai.jpg",
+    image: "/kalsubai.webp",
     category: "Destination Guide",
   },
   {
@@ -390,25 +396,73 @@ The Bhandardara and Igatpuri regions in Nashik are easily accessible from both P
 Together, we can ensure that these magnificent Sahyadri forts remain pristine for generations to come.`,
     author: "Amit Kulkarni",
     date: "2025-11-10",
-    image: "/images/trek-harishchandragad.jpg",
+    image: "/harishchandra.jpg",
     category: "Environment",
   },
-]
+];
 
 export const galleryImages: GalleryImage[] = [
-  { src: "/images/hero-mountain.jpg", alt: "Sahyadri mountain range panorama during monsoon", category: "Mountains" },
-  { src: "/images/trek-vasota.jpg", alt: "Vasota Fort jungle trail through Koyna sanctuary", category: "Forts" },
-  { src: "/images/trek-kalsubai.jpg", alt: "Kalsubai Peak - highest point in Maharashtra", category: "Mountains" },
-  { src: "/images/trek-harishchandragad.jpg", alt: "Konkan Kada cliff at Harishchandragad", category: "Forts" },
-  { src: "/images/trek-ratangad.jpg", alt: "Ratangad Fort with Bhandardara lake views", category: "Forts" },
-  { src: "/images/trek-rajmachi.jpg", alt: "Rajmachi Fort in the monsoon", category: "Forts" },
-  { src: "/images/gallery-1.jpg", alt: "Sunset from a Sahyadri mountain fort", category: "Sunsets" },
-  { src: "/images/gallery-2.jpg", alt: "Campsite on Sahyadri fort plateau", category: "Camping" },
-  { src: "/images/gallery-3.jpg", alt: "Waterfall cascading down Sahyadri cliff", category: "Waterfalls" },
-  { src: "/images/gallery-4.jpg", alt: "Ancient Maratha fort entrance gate", category: "Forts" },
-  { src: "/images/gallery-5.jpg", alt: "Koyna backwaters surrounded by green hills", category: "Lakes" },
-  { src: "/images/about-team.jpg", alt: "Miles With Nature trekking team", category: "Team" },
-]
+  {
+    src: "/images/hero-mountain.jpg",
+    alt: "Sahyadri mountain range panorama during monsoon",
+    category: "Mountains",
+  },
+  {
+    src: "/vasota.webp",
+    alt: "Vasota Fort jungle trail through Koyna sanctuary",
+    category: "Forts",
+  },
+  {
+    src: "/kalsubai.webp",
+    alt: "Kalsubai Peak - highest point in Maharashtra",
+    category: "Mountains",
+  },
+  {
+    src: "/harishchandra.jpg",
+    alt: "Konkan Kada cliff at Harishchandragad",
+    category: "Forts",
+  },
+  {
+    src: "/ratangad.jpeg",
+    alt: "Ratangad Fort with Bhandardara lake views",
+    category: "Forts",
+  },
+  {
+    src: "/rajmachi.webp",
+    alt: "Rajmachi Fort in the monsoon",
+    category: "Forts",
+  },
+  {
+    src: "/images/gallery-1.jpg",
+    alt: "Sunset from a Sahyadri mountain fort",
+    category: "Sunsets",
+  },
+  {
+    src: "/images/gallery-2.jpg",
+    alt: "Campsite on Sahyadri fort plateau",
+    category: "Camping",
+  },
+  {
+    src: "/images/gallery-3.jpg",
+    alt: "Waterfall cascading down Sahyadri cliff",
+    category: "Waterfalls",
+  },
+  {
+    src: "/images/gallery-4.jpg",
+    alt: "Ancient Maratha fort entrance gate",
+    category: "Forts",
+  },
+  {
+    src: "/images/gallery-5.jpg",
+    alt: "Koyna backwaters surrounded by green hills",
+    category: "Lakes",
+  },
+  {
+    src: "/images/about-team.jpg",
+    alt: "Miles With Nature trekking team",
+    category: "Team",
+  },
+];
 
 export const testimonials: Testimonial[] = [
   {
@@ -416,86 +470,98 @@ export const testimonials: Testimonial[] = [
     initials: "SJ",
     trek: "Vasota Jungle Trek",
     rating: 5,
-    quote: "The boat ride to Vasota was absolutely magical. The jungle trail was thrilling, and camping on the fort under the stars was an experience I will never forget. Best trekking group in Pune!",
+    quote:
+      "The boat ride to Vasota was absolutely magical. The jungle trail was thrilling, and camping on the fort under the stars was an experience I will never forget. Best trekking group in Pune!",
   },
   {
     name: "Pooja Kulkarni",
     initials: "PK",
     trek: "Kalsubai Peak Trek",
     rating: 5,
-    quote: "Reaching the highest point in Maharashtra was a dream come true. The iron ladder sections were exciting and the views from the top were breathtaking. The team was very supportive throughout.",
+    quote:
+      "Reaching the highest point in Maharashtra was a dream come true. The iron ladder sections were exciting and the views from the top were breathtaking. The team was very supportive throughout.",
   },
   {
     name: "Aditya Deshmukh",
     initials: "AD",
     trek: "Harishchandragad Trek",
     rating: 5,
-    quote: "Konkan Kada at sunrise is something every Maharashtrian must witness. The Nalichi Vaat route was challenging but our trek leader made sure everyone was safe. Incredible experience!",
+    quote:
+      "Konkan Kada at sunrise is something every Maharashtrian must witness. The Nalichi Vaat route was challenging but our trek leader made sure everyone was safe. Incredible experience!",
   },
   {
     name: "Sneha Patil",
     initials: "SP",
     trek: "Rajmachi Fort Trek",
     rating: 5,
-    quote: "Perfect monsoon trek! The waterfalls, the green valleys, and the village homestay at Udhewadi were amazing. The home-cooked food was delicious. Highly recommend for beginners!",
+    quote:
+      "Perfect monsoon trek! The waterfalls, the green valleys, and the village homestay at Udhewadi were amazing. The home-cooked food was delicious. Highly recommend for beginners!",
   },
   {
     name: "Omkar Bhosale",
     initials: "OB",
     trek: "Sandhan Valley Trek",
     rating: 5,
-    quote: "The Valley of Shadows lived up to its name. Rappelling down the rock face and swimming through the pools was pure adrenaline. Miles With Nature made it safe and fun!",
+    quote:
+      "The Valley of Shadows lived up to its name. Rappelling down the rock face and swimming through the pools was pure adrenaline. Miles With Nature made it safe and fun!",
   },
   {
     name: "Rutuja Shinde",
     initials: "RS",
     trek: "Ratangad Fort Trek",
     rating: 5,
-    quote: "The Nedhe at Ratangad was a highlight. The views of Bhandardara lake from the summit were stunning. Very well organized trek with a great group of people.",
+    quote:
+      "The Nedhe at Ratangad was a highlight. The views of Bhandardara lake from the summit were stunning. Very well organized trek with a great group of people.",
   },
   {
     name: "Tejas Gaikwad",
     initials: "TG",
     trek: "Vasota Jungle Trek",
     rating: 4,
-    quote: "Amazing experience trekking through the dense Koyna jungle. The boat ride was scenic and the camping was well arranged. Would definitely join again for another trek!",
+    quote:
+      "Amazing experience trekking through the dense Koyna jungle. The boat ride was scenic and the camping was well arranged. Would definitely join again for another trek!",
   },
   {
     name: "Manasi Deshpande",
     initials: "MD",
     trek: "Kalsubai Peak Trek",
     rating: 5,
-    quote: "As a first-time trekker, I was nervous about the ladders, but the guides were so encouraging. Standing on the highest peak in Maharashtra gave me such a sense of achievement!",
+    quote:
+      "As a first-time trekker, I was nervous about the ladders, but the guides were so encouraging. Standing on the highest peak in Maharashtra gave me such a sense of achievement!",
   },
   {
     name: "Rajesh Pawar",
     initials: "RP",
     trek: "Harishchandragad Trek",
     rating: 5,
-    quote: "I have trekked with many groups but Miles With Nature stands out for their safety standards and warm hospitality. The Kedareshwar cave was a spiritual experience.",
+    quote:
+      "I have trekked with many groups but Miles With Nature stands out for their safety standards and warm hospitality. The Kedareshwar cave was a spiritual experience.",
   },
   {
     name: "Priyanka Mahajan",
     initials: "PM",
     trek: "Rajmachi Fort Trek",
     rating: 5,
-    quote: "The firefly season trek to Rajmachi was absolutely enchanting. Thousands of fireflies lighting up the dark forest was like walking through a fairy tale. Unforgettable!",
+    quote:
+      "The firefly season trek to Rajmachi was absolutely enchanting. Thousands of fireflies lighting up the dark forest was like walking through a fairy tale. Unforgettable!",
   },
   {
     name: "Aniket Joshi",
     initials: "AJ",
     trek: "Sandhan Valley Trek",
     rating: 5,
-    quote: "This was the most adventurous trek I have ever done. The narrow canyon, the rappelling, the water pools - everything was thrilling. Safety was top-notch. A must-do!",
+    quote:
+      "This was the most adventurous trek I have ever done. The narrow canyon, the rappelling, the water pools - everything was thrilling. Safety was top-notch. A must-do!",
   },
   {
     name: "Sanika Thakur",
     initials: "ST",
     trek: "Vasota Jungle Trek",
     rating: 5,
-    quote: "Vasota is a hidden gem in the Sahyadris. The boat ride, the jungle sounds, the fort history - everything was perfect. The food arrangements were excellent too!",
+    quote:
+      "Vasota is a hidden gem in the Sahyadris. The boat ride, the jungle sounds, the fort history - everything was perfect. The food arrangements were excellent too!",
   },
-]
+];
 
 export const safetyTips = [
   {
@@ -534,10 +600,9 @@ export const safetyTips = [
       "Pack energy bars, chikki, dry fruits, and enough food for the trek. Start with a good breakfast. Your body needs fuel for the climb. Carry glucose powder for emergency energy.",
     icon: "utensils",
   },
-]
+];
 
-
-export const whatsappNumber = "+91-8010283201" 
+export const whatsappNumber = "+91-8010283201";
 export const maharashtraTrekNames: string[] = [
   "Harishchandragad",
   "Kalsubai",
@@ -628,5 +693,5 @@ export const maharashtraTrekNames: string[] = [
   "Malshej Ghat",
   "Harishchandragad via Nalichi Vaat",
   "Harishchandragad via Pachnai",
-  "AMK Traverse"
+  "AMK Traverse",
 ];

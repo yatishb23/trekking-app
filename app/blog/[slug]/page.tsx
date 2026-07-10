@@ -5,8 +5,6 @@ import { notFound } from "next/navigation"
 import { ArrowLeft, Calendar, User } from "lucide-react"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
 import { blogPosts } from "@/lib/data"
 
 interface BlogPostPageProps {
@@ -38,87 +36,97 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   return (
     <>
       <Navbar />
-      <main>
-        <article className="py-16">
-          <div className="mx-auto max-w-3xl px-4">
-            <Link
-              href="/blog"
-              className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Blog
-            </Link>
+      <main className="bg-white">
+        <article className="pb-24 sm:pb-32">
+          {/* Header */}
+          <section className="bg-stone-50 pt-32 pb-16 text-center px-6 sm:pt-40">
+            <div className="mx-auto max-w-4xl mt-10">
+              <Link
+                href="/blog"
+                className="mb-8 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900 shadow-sm transition-colors hover:bg-stone-50"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                Back to Journal
+              </Link>
 
-            <Badge className="mt-6 bg-primary text-primary-foreground border-0">
-              {post.category}
-            </Badge>
-            <h1 className="mt-4 text-balance font-serif text-3xl font-bold text-foreground sm:text-4xl">
-              {post.title}
-            </h1>
+              <div className="mb-6">
+                <span className="inline-block rounded-lg border border-stone-200 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-900">
+                  {post.category}
+                </span>
+              </div>
 
-            <div className="mt-4 flex items-center gap-4 text-sm text-muted-foreground">
-              <span className="flex items-center gap-1.5">
-                <User className="h-4 w-4" />
-                {post.author}
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Calendar className="h-4 w-4" />
-                {new Date(post.date).toLocaleDateString("en-IN", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
+              <h1 className="text-4xl font-light tracking-tight text-zinc-900 sm:text-5xl md:text-6xl lg:text-7xl" style={{ fontFamily: "var(--font-playfair)" }}>
+                {post.title}
+              </h1>
+
+              <div className="mt-8 flex items-center justify-center gap-6 text-sm text-stone-400">
+                <span className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  {post.author}
+                </span>
+                <span className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {new Date(post.date).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </span>
+              </div>
             </div>
+          </section>
 
-            <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-xl">
+          <div className="mx-auto max-w-4xl px-6 lg:px-8 -mt-8 relative z-10">
+            {/* Featured Image */}
+            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-3xl shadow-2xl bg-stone-100">
               <Image
                 src={post.image}
                 alt={post.title}
                 fill
                 priority
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 768px"
+                sizes="(max-width: 1024px) 100vw, 1024px"
               />
             </div>
 
-            <Separator className="my-8" />
-
-            <div className="prose prose-sm max-w-none">
-              {post.content.split("\n\n").map((paragraph, index) => {
-                if (paragraph.startsWith("**") && paragraph.endsWith("**")) {
-                  return (
-                    <h3
-                      key={index}
-                      className="mt-8 font-serif text-xl font-semibold text-foreground first:mt-0"
-                    >
-                      {paragraph.replace(/\*\*/g, "")}
-                    </h3>
-                  )
-                }
-                if (paragraph.startsWith("**")) {
-                  const parts = paragraph.split("**")
+            {/* Content */}
+            <div className="mx-auto mt-14 max-w-3xl sm:mt-16">
+              <div className="prose prose-lg prose-stone max-w-none prose-headings:font-serif prose-headings:font-light prose-headings:text-zinc-900 prose-p:font-light prose-p:text-stone-500 prose-p:leading-relaxed prose-strong:font-medium prose-strong:text-zinc-900">
+                {post.content.split("\n\n").map((paragraph, index) => {
+                  if (paragraph.startsWith("**") && paragraph.endsWith("**")) {
+                    return (
+                      <h3
+                        key={index}
+                        className="mt-12 mb-6 text-3xl font-light text-zinc-900 first:mt-0"
+                      >
+                        {paragraph.replace(/\*\*/g, "")}
+                      </h3>
+                    )
+                  }
+                  if (paragraph.startsWith("**")) {
+                    const parts = paragraph.split("**")
+                    return (
+                      <p
+                        key={index}
+                        className="my-6 text-lg font-light leading-relaxed text-stone-500"
+                      >
+                        <strong className="font-medium text-zinc-900">
+                          {parts[1]}
+                        </strong>
+                        {parts[2]}
+                      </p>
+                    )
+                  }
                   return (
                     <p
                       key={index}
-                      className="mt-4 text-sm leading-relaxed text-muted-foreground"
+                      className="my-6 text-lg font-light leading-relaxed text-stone-500"
                     >
-                      <strong className="font-semibold text-foreground">
-                        {parts[1]}
-                      </strong>
-                      {parts[2]}
+                      {paragraph}
                     </p>
                   )
-                }
-                return (
-                  <p
-                    key={index}
-                    className="mt-4 text-sm leading-relaxed text-muted-foreground"
-                  >
-                    {paragraph}
-                  </p>
-                )
-              })}
+                })}
+              </div>
             </div>
           </div>
         </article>

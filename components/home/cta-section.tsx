@@ -16,8 +16,8 @@ export function CtaSection() {
   const y = useTransform(scrollYProgress, [0, 1], ["-8%", "8%"]);
 
   return (
-    <section ref={containerRef} className="mx-4 sm:mx-6 mb-16">
-      <div className="relative flex min-h-[420px] items-center overflow-hidden rounded-2xl shadow-sm border border-gray-200">
+    <section ref={containerRef} className="mx-4 sm:mx-6 lg:mx-8 mb-12 sm:mb-16">
+      <div className="relative flex min-h-[400px] items-center overflow-hidden rounded-3xl border border-stone-200 sm:min-h-[450px]">
         {/* Background image with parallax */}
         <motion.div style={{ y }} className="absolute inset-0 z-0">
           <Image
@@ -30,19 +30,19 @@ export function CtaSection() {
         </motion.div>
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/85 via-black/60 to-black/20" />
 
         {/* Content */}
-        <div className="relative z-20 px-8 py-20 sm:px-16">
+        <div className="relative z-20 px-8 py-16 sm:px-12 sm:py-20 lg:px-20">
           <div className="max-w-xl">
             <motion.div
               initial={{ opacity: 0, x: -16 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
-              className="mb-6 flex items-center gap-3"
+              className="mb-6"
             >
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white/80 backdrop-blur-md">
                 <Compass className="h-3.5 w-3.5" />
                 Ready for the journey?
               </div>
@@ -53,10 +53,11 @@ export function CtaSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="font-serif text-5xl sm:text-6xl font-light leading-tight text-white"
+              className="text-4xl font-light leading-tight text-white sm:text-5xl lg:text-6xl"
+              style={{ fontFamily: "var(--font-playfair)" }}
             >
               The Mountains Are{" "}
-              <em className="font-light italic text-gray-300">
+              <em className="font-light italic text-stone-300">
                 Calling You
               </em>
             </motion.h2>
@@ -66,7 +67,7 @@ export function CtaSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.3 }}
-              className="mt-6 text-base text-gray-300 leading-relaxed max-w-md"
+              className="mt-6 max-w-md text-base leading-relaxed text-white/50"
             >
               Join a community of explorers and conquer paths unknown.
               Your next adventure awaits just a click away.
@@ -81,10 +82,10 @@ export function CtaSection() {
             >
               <Link
                 href="/treks"
-                className="group inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-sm font-semibold uppercase tracking-wider text-black transition-transform hover:-translate-y-1"
+                className="group inline-flex items-center gap-3 rounded-xl bg-white px-8 py-4 text-[11px] font-bold uppercase tracking-[0.15em] text-zinc-950 transition-all duration-300 hover:bg-white/90 hover:shadow-xl hover:shadow-white/10 hover:-translate-y-0.5"
               >
                 Start Exploring
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </motion.div>
           </div>

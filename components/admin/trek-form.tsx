@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createTrek, updateTrek } from "@/lib/data-store";
+import { uploadTrekImages } from "@/lib/upload";
 import type { Trek } from "@/lib/data";
 
 const difficulties = ["Easy", "Moderate", "Challenging", "Extreme"] as const;
@@ -16,19 +17,16 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
 
   async function parseImages(formData: FormData): Promise<string[]> {
     const files = formData.getAll("images") as File[];
-    const parsedImages: string[] = [];
-
-    for (const file of files) {
-      if (file && file.size > 0) {
-        if (file.size > 5 * 1024 * 1024)
-          throw new Error(`Image ${file.name} must be less than 5MB`);
-        const buffer = await file.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString("base64");
-        parsedImages.push(`data:${file.type};base64,${base64}`);
-      }
+    
+    // Only upload files that actually have data
+    const validFiles = files.filter(f => f && f.size > 0);
+    let newImagePaths: string[] = [];
+    
+    if (validFiles.length > 0) {
+      newImagePaths = await uploadTrekImages(validFiles);
     }
 
-    return [...existingImages, ...parsedImages];
+    return [...existingImages, ...newImagePaths];
   }
 
   async function handleSubmit(
@@ -161,7 +159,7 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
                       <button
                         type="button"
                         onClick={() => removeExistingImage(i)}
-                        className="absolute inset-0 bg-black/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold"
+                        className="absolute inset-0 bg-zinc-950/50 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs font-semibold"
                       >
                         Remove
                       </button>
@@ -203,7 +201,7 @@ export function TrekForm({ trek }: { trek?: Trek | null }) {
         <button
           type="submit"
           disabled={isPending}
-          className="rounded-md bg-black px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-50"
+          className="rounded-md bg-zinc-950 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-gray-800 disabled:opacity-50"
         >
           {isPending ? "Saving..." : isEditing ? "Update Trek" : "Create Trek"}
         </button>

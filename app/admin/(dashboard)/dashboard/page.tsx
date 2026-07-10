@@ -28,10 +28,10 @@ export default async function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="font-serif text-3xl font-semibold text-[#2D5016]">
+      <h1 className="font-serif text-3xl font-semibold text-zinc-900">
         Dashboard
       </h1>
-      <p className="mt-1 text-sm text-[#8B7355]">
+      <p className="mt-1 text-sm text-gray-500">
         Welcome back! Here&apos;s what&apos;s happening.
       </p>
 
@@ -41,37 +41,37 @@ export default async function AdminDashboardPage() {
           icon={Mountain}
           label="Total Treks"
           value={totalTreks}
-          color="#4A7C3F"
+          color="#18181b"
         />
         <StatCard
           icon={UsersIcon}
           label="Total Users"
           value={totalUsers}
-          color="#C4622D"
+          color="#18181b"
         />
         <StatCard
           icon={TrendingUp}
           label="Total Bookings"
           value={totalBookings}
-          color="#7BAF6E"
+          color="#18181b"
         />
         <StatCard
           icon={IndianRupee}
           label="Revenue"
           value={`₹${(revenue / 1000).toFixed(1)}K`}
-          color="#2D5016"
+          color="#18181b"
         />
       </div>
 
       {/* Featured Treks */}
       <div className="mt-10">
         <div className="flex items-center justify-between">
-          <h2 className="font-serif text-xl font-semibold text-[#2D5016]">
+          <h2 className="font-serif text-xl font-semibold text-zinc-900">
             Featured Treks
           </h2>
           <Link
             href="/admin/treks"
-            className="text-xs font-bold uppercase tracking-widest text-[#4A7C3F] transition-colors hover:text-[#2D5016]"
+            className="text-xs font-bold uppercase tracking-widest text-zinc-600 transition-colors hover:text-zinc-900"
           >
             View All
           </Link>
@@ -81,17 +81,17 @@ export default async function AdminDashboardPage() {
             <Link
               key={trek.slug}
               href={`/admin/treks/${trek.slug}/edit`}
-              className="clay-card-sm rounded-2xl p-5 transition-all hover:-translate-y-1"
+              className="bg-white border border-gray-200 shadow-sm rounded-2xl p-5 transition-all hover:-translate-y-1 hover:shadow-md"
             >
-              <h3 className="font-serif text-base font-medium text-[#2D5016]">
+              <h3 className="font-serif text-base font-medium text-zinc-900">
                 {trek.title}
               </h3>
-              <p className="mt-1 text-xs text-[#8B7355]">{trek.location}</p>
+              <p className="mt-1 text-xs text-gray-500">{trek.location}</p>
               <div className="mt-3 flex items-center gap-3 text-xs font-medium">
-                <span className="rounded-full bg-[#4A7C3F]/10 px-3 py-1 text-[#4A7C3F]">
+                <span className="rounded-full bg-gray-100 px-3 py-1 text-zinc-900">
                   {trek.difficulty}
                 </span>
-                <span className="text-[#8B7355]">₹{trek.price}</span>
+                <span className="text-gray-500">₹{trek.price}</span>
               </div>
             </Link>
           ))}
@@ -100,20 +100,20 @@ export default async function AdminDashboardPage() {
 
       {/* Quick Actions */}
       <div className="mt-10">
-        <h2 className="font-serif text-xl font-semibold text-[#2D5016]">
+        <h2 className="font-serif text-xl font-semibold text-zinc-900">
           Quick Actions
         </h2>
         <div className="mt-4 flex flex-wrap gap-4">
           <Link
             href="/admin/treks/new"
-            className="btn-clay-primary rounded-full px-6 py-3 text-xs"
+            className="bg-zinc-950 text-white shadow-md hover:-translate-y-0.5 transition-all rounded-full px-6 py-3 text-xs"
           >
             Add New Trek
           </Link>
           <Link
             href="/treks"
             target="_blank"
-            className="btn-clay-light rounded-full px-6 py-3 text-xs"
+            className="bg-white border border-gray-200 text-zinc-900 hover:bg-gray-50 hover:-translate-y-0.5 transition-all rounded-full px-6 py-3 text-xs"
           >
             View Site
           </Link>
@@ -135,19 +135,19 @@ function StatCard({
   color: string;
 }) {
   return (
-    <div className="clay-card-sm rounded-2xl p-6">
+    <div className="bg-white border border-gray-200 shadow-sm rounded-2xl p-6">
       <div className="flex items-center gap-3">
         <div
-          className="flex h-10 w-10 items-center justify-center rounded-xl"
-          style={{ background: `${color}15`, color }}
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-100"
+          style={{ color }}
         >
           <Icon className="h-5 w-5" />
         </div>
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-[#8B7355]">
+          <p className="text-xs font-medium uppercase tracking-wider text-gray-500">
             {label}
           </p>
-          <p className="mt-0.5 font-serif text-2xl font-semibold text-[#2D5016]">
+          <p className="mt-0.5 font-serif text-2xl font-semibold text-zinc-900">
             {value}
           </p>
         </div>

@@ -10,15 +10,15 @@ interface BookTrekButtonProps {
 import { whatsappNumber } from "@/lib/data";
 export function BookTrekButton({ trekName, className }: BookTrekButtonProps) {
   const handleBookClick = () => {
-    const message = `🌟 *Trek Booking Inquiry*
+    const message = `Trek Booking Inquiry
 
 I am interested in booking the following trek:
-🏔️ *${trekName}*
+${trekName}
 
 Please share the available dates and further details.
 
 ---
-_Sent via Miles With Nature Website_`;
+Sent via Miles With Nature Website`;
 
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, "_blank");
@@ -26,7 +26,7 @@ _Sent via Miles With Nature Website_`;
 
   return (
     <Button
-      className={`gap-2 bg-linear-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 transition-all duration-300 shadow-lg shadow-green-600/20 ${className}`}
+      className={`gap-2 rounded-xl bg-[#25D366] text-white shadow-lg shadow-[#25D366]/20 transition-all duration-300 hover:bg-[#20bd5a] hover:shadow-xl hover:shadow-[#25D366]/30 hover:-translate-y-0.5 ${className}`}
       size="lg"
       onClick={handleBookClick}
     >

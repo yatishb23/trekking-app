@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { Mail, Phone, MapPin, Send, MessageCircle } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Phone, MapPin, Send, MessageCircle, Mail } from "lucide-react";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -15,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { maharashtraTrekNames } from "@/lib/data";
+import { getTrekTitles } from "@/lib/data-store";
 import {
   Popover,
   PopoverContent,
@@ -30,6 +29,8 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 const contactOptions = [
   {
     icon: Phone,
@@ -39,8 +40,6 @@ const contactOptions = [
     contact: "+91 98765 43210",
     availability: "Mon - Sat, 9am - 6pm IST",
     href: "tel:+919876543210",
-    bgGradient: "bg-gradient-to-br from-blue-500 to-blue-600",
-    iconBg: "bg-blue-500/20 text-blue-600",
   },
   {
     icon: MessageCircle,
@@ -50,8 +49,6 @@ const contactOptions = [
     contact: "WhatsApp Business",
     availability: "24/7 Available",
     href: "https://wa.me/917020212486?text=Hi! I am interested in joining a trek with Miles With Nature. Can you share more details?",
-    bgGradient: "bg-gradient-to-br from-green-500 to-green-600",
-    iconBg: "bg-green-500/20 text-green-600",
   },
   {
     icon: Send,
@@ -61,8 +58,6 @@ const contactOptions = [
     contact: "Contact Form",
     availability: "Response within 24 hours",
     href: "#contact-form",
-    bgGradient: "bg-gradient-to-br from-orange-500 to-orange-600",
-    iconBg: "bg-orange-500/20 text-orange-600",
   },
 ];
 
@@ -74,7 +69,15 @@ const officeInfo = {
 
 export default function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
-  const [trekSearch] = useState("");
+  const [trekSearch, setTrekSearch] = useState("");
+  const [dynamicTrekNames, setDynamicTrekNames] = useState<string[]>([]);
+
+  useEffect(() => {
+    getTrekTitles()
+      .then(setDynamicTrekNames)
+      .catch(() => {});
+  }, []);
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -86,11 +89,11 @@ export default function ContactPage() {
   });
 
   const filteredTreks = useMemo(() => {
-    if (!trekSearch) return maharashtraTrekNames;
-    return maharashtraTrekNames.filter((trek) =>
+    if (!trekSearch) return dynamicTrekNames;
+    return dynamicTrekNames.filter((trek) =>
       trek.toLowerCase().includes(trekSearch.toLowerCase()),
     );
-  }, [trekSearch]);
+  }, [trekSearch, dynamicTrekNames]);
 
   function handleInputChange(field: string, value: string) {
     setFormData((prev) => ({
@@ -98,41 +101,42 @@ export default function ContactPage() {
       [field]: value,
     }));
   }
+
   function formatWhatsAppMessage() {
     const subjectLabels: { [key: string]: string } = {
-      booking: "🏔️ Trek Booking",
-      inquiry: "❓ General Inquiry",
-      custom: "🎯 Custom Trek Request",
-      group: "👥 Group Booking",
-      feedback: "💬 Feedback",
-      partnership: "🤝 Partnership",
+      booking: "Trek Booking",
+      inquiry: "General Inquiry",
+      custom: "Custom Trek Request",
+      group: "Group Booking",
+      feedback: "Feedback",
+      partnership: "Partnership",
     };
 
     const cityLabels: { [key: string]: string } = {
-      pune: "🏢 Pune",
-      mumbai: "🏙️ Mumbai",
-      solapur: "🏡 Solapur",
+      pune: "Pune",
+      mumbai: "Mumbai",
+      solapur: "Solapur",
     };
 
-    const trekLabels: { [key: string]: string } = maharashtraTrekNames.reduce(
+    const trekLabels: { [key: string]: string } = dynamicTrekNames.reduce(
       (acc, trek) => {
-        acc[trek.toLowerCase()] = `🏔️ ${trek}`;
+        acc[trek.toLowerCase()] = trek;
         return acc;
       },
       {} as { [key: string]: string },
     );
 
-    const message = `🌟 *New Contact Form Submission*
+    const message = `New Contact Form Submission
 
-👤 *Name:* ${formData.name}
-📧 *Email:* ${formData.email}${formData.phone ? `\n📱 *Phone:* ${formData.phone}` : ""}${formData.city ? `\n🏠 *City:* ${cityLabels[formData.city] || formData.city}` : ""}${formData.trek ? `\n🏔️ *Interested Trek:* ${trekLabels[formData.trek] || formData.trek}` : ""}
-📋 *Subject:* ${subjectLabels[formData.subject] || formData.subject}
+Name: ${formData.name}
+Email: ${formData.email}${formData.phone ? `\nPhone: ${formData.phone}` : ""}${formData.city ? `\nCity: ${cityLabels[formData.city] || formData.city}` : ""}${formData.trek ? `\nInterested Trek: ${trekLabels[formData.trek] || formData.trek}` : ""}
+Subject: ${subjectLabels[formData.subject] || formData.subject}
 
-💬 *Message:*
+Message:
 ${formData.message}
 
 ---
-_Sent via Miles With Nature Contact Form_`;
+Sent via Miles With Nature Contact Form`;
 
     return encodeURIComponent(message);
   }
@@ -140,7 +144,6 @@ _Sent via Miles With Nature Contact Form_`;
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    // Validate required fields
     if (
       !formData.name ||
       !formData.email ||
@@ -151,17 +154,12 @@ _Sent via Miles With Nature Contact Form_`;
       return;
     }
 
-    // Create WhatsApp link with formatted message
     const whatsappMessage = formatWhatsAppMessage();
     const whatsappUrl = `https://wa.me/917020212486?text=${whatsappMessage}`;
 
-    // Open WhatsApp in new tab
     window.open(whatsappUrl, "_blank");
-
-    // Show success state
     setSubmitted(true);
 
-    // Reset form after a delay
     setTimeout(() => {
       setFormData({
         name: "",
@@ -179,20 +177,18 @@ _Sent via Miles With Nature Contact Form_`;
   return (
     <>
       <Navbar />
-      <main>
+      <main className="bg-white">
         {/* Hero */}
-        <section className="relative overflow-hidden from-primary/5 via-muted/30 to-accent/5 py-24 lg:py-32">
-          {/* <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23059669" fill-opacity="0.03"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-30"></div> */}
-          <div className="relative mx-auto max-w-4xl px-4 text-center">
-            <span className="inline-block px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 backdrop-blur-sm text-xs font-bold uppercase tracking-[0.3em] text-primary mb-6">
+        <section className="bg-stone-50 py-32 text-center px-6 sm:py-40">
+          <div className="mx-auto max-w-4xl mt-10">
+            <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-white px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900 shadow-sm">
               Get in Touch
             </span>
-            <h1 className="text-balance font-serif text-5xl font-bold text-foreground sm:text-6xl lg:text-7xl leading-[1.1]">
-              Let&apos;s Start Your
-              <br />
-              <span className="text-primary italic">Adventure</span> Together
+            <h1 className="text-5xl font-light tracking-tight text-zinc-900 sm:text-6xl md:text-7xl" style={{ fontFamily: "var(--font-playfair)" }}>
+              Let&apos;s Start Your{" "}
+              <em className="italic text-stone-400">Adventure</em>
             </h1>
-            <p className="mx-auto mt-8 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl font-light">
+            <p className="mx-auto mt-6 max-w-2xl text-lg font-light leading-relaxed text-stone-500">
               Ready to explore the mountains? Choose how you&apos;d like to
               connect with our trekking experts and let&apos;s plan your next
               unforgettable journey.
@@ -201,429 +197,351 @@ _Sent via Miles With Nature Contact Form_`;
         </section>
 
         {/* Contact Options */}
-        <section className="py-20 lg:py-24">
-          <div className="mx-auto max-w-7xl px-4 lg:px-8">
-            <div className="text-center mb-16">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-primary/20 bg-primary/10 text-xs font-bold uppercase tracking-[0.3em] text-primary mb-4">
-                Choose Your Preferred Way
-              </span>
-              <h2 className="font-serif text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl">
-                How Would You Like to
-                <span className="text-primary italic block">
-                  {" "}
-                  Connect With Us?
-                </span>
-              </h2>
-            </div>
-
-            <div className="grid gap-8 md:grid-cols-3 mb-20">
-              {contactOptions.map((option, index) => (
-                <Card
+        <section className="py-24 sm:py-32">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="mb-20 grid gap-5 md:grid-cols-3">
+              {contactOptions.map((option) => (
+                <div
                   key={option.title}
-                  className="group relative overflow-hidden border-0 bg-white/80 backdrop-blur-sm shadow-xl shadow-black/5 transition-all duration-300 hover:shadow-2xl hover:shadow-black/10 hover:-translate-y-2"
+                  className="group flex flex-col rounded-2xl border border-stone-200 bg-stone-50 p-7 transition-all duration-500 hover:-translate-y-1 hover:border-zinc-950 hover:bg-zinc-950 hover:shadow-2xl hover:shadow-zinc-950/20 sm:p-8"
                 >
-                  <div
-                    className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${option.bgGradient}`}
-                  />
-                  <CardContent className="relative p-8">
-                    <div
-                      className={`inline-flex h-16 w-16 items-center justify-center rounded-2xl ${option.iconBg} mb-6 group-hover:bg-white/20 group-hover:text-white transition-all duration-300`}
-                    >
-                      <option.icon className="h-8 w-8" />
-                    </div>
-                    <h3 className="font-serif text-xl font-bold text-foreground group-hover:text-white transition-colors duration-300 mb-2">
-                      {option.title}
-                    </h3>
-                    <p className="text-muted-foreground group-hover:text-white/90 transition-colors duration-300 mb-4 text-sm leading-relaxed">
-                      {option.subtitle}
+                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-xl border border-stone-200 bg-white transition-all duration-500 group-hover:border-white/10 group-hover:bg-white/10">
+                    <option.icon className="h-5 w-5 text-zinc-900 transition-colors duration-500 group-hover:text-white" />
+                  </div>
+                  <h3 className="text-lg font-medium text-zinc-900 transition-colors duration-500 group-hover:text-white" style={{ fontFamily: "var(--font-playfair)" }}>
+                    {option.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-stone-500 transition-colors duration-500 group-hover:text-stone-300">
+                    {option.subtitle}
+                  </p>
+                  <div className="mt-5 space-y-1">
+                    <p className="text-sm font-medium text-zinc-900 transition-colors duration-500 group-hover:text-white">
+                      {option.contact}
                     </p>
-                    <div className="space-y-1 mb-6">
-                      <p className="text-sm font-medium text-foreground group-hover:text-white transition-colors duration-300">
-                        {option.contact}
-                      </p>
-                      <p className="text-xs text-muted-foreground group-hover:text-white/80 transition-colors duration-300">
-                        {option.availability}
-                      </p>
-                    </div>
+                    <p className="text-xs text-stone-400 transition-colors duration-500 group-hover:text-stone-400">
+                      {option.availability}
+                    </p>
+                  </div>
+                  <div className="mt-auto pt-6">
                     <Button
                       asChild
                       variant="outline"
-                      className="w-full border-2 border-primary/20 bg-transparent text-primary hover:bg-primary hover:text-white group-hover:border-white/30 group-hover:text-white group-hover:hover:bg-white/20 transition-all duration-300"
-                      onClick={(e) => {
-                        if (option.href === "#contact-form") {
-                          e.preventDefault();
-                          document
-                            .getElementById("contact-form")
-                            ?.scrollIntoView({ behavior: "smooth" });
-                        }
-                      }}
+                      className="w-full rounded-xl border-stone-200 bg-transparent text-xs font-bold uppercase tracking-[0.1em] transition-all duration-500 group-hover:border-white/20 group-hover:text-white hover:bg-white/10 hover:text-white"
                     >
-                      {option.href.startsWith("#") ? (
-                        <span>{option.action}</span>
-                      ) : (
-                        <a
-                          href={option.href}
-                          target={
-                            option.href.startsWith("http") ? "_blank" : "_self"
-                          }
-                          rel={
-                            option.href.startsWith("http")
-                              ? "noopener noreferrer"
-                              : ""
-                          }
-                        >
-                          {option.action}
-                        </a>
-                      )}
+                      <a href={option.href}>{option.action}</a>
                     </Button>
-                  </CardContent>
-                </Card>
+                  </div>
+                </div>
               ))}
             </div>
 
-            {/* Office Information */}
-            <div className="from-muted/30 to-muted/10 rounded-3xl p-8 lg:p-12 mb-20">
-              <div className="text-center mb-12">
-                <h3 className="font-serif text-2xl font-bold text-foreground mb-4">
-                  Visit Our Office
-                </h3>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Planning a trek in person? Drop by our office in the heart of
-                  Manali for personalized guidance and local insights.
-                </p>
-              </div>
-
-              <div className="grid gap-8 md:grid-cols-3">
-                <div className="text-center">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                    <MapPin className="h-6 w-6" />
-                  </div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Our Address
-                  </h4>
-                  {officeInfo.address.map((line) => (
-                    <p key={line} className="text-sm text-muted-foreground">
-                      {line}
-                    </p>
-                  ))}
+            <div className="grid gap-12 lg:grid-cols-2" id="contact-form">
+              {/* Contact Form */}
+              <div className="rounded-3xl border border-stone-200 bg-white p-6 shadow-sm sm:p-8 lg:p-10">
+                <div className="mb-8">
+                  <h2 className="text-3xl font-light text-zinc-900" style={{ fontFamily: "var(--font-playfair)" }}>
+                    Send a Message
+                  </h2>
+                  <p className="mt-2 text-sm text-stone-400">
+                    Fill out the form below and we&apos;ll get back to you
+                    within 24 hours.
+                  </p>
                 </div>
 
-                <div className="text-center">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                    <Mail className="h-6 w-6" />
-                  </div>
-                  <h4 className="font-semibold text-foreground mb-2">
-                    Email Us
-                  </h4>
-                  {officeInfo.email.map((email) => (
-                    <p key={email} className="text-sm text-muted-foreground">
-                      <a
-                        href={`mailto:${email}`}
-                        className="hover:text-primary transition-colors"
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="name"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
                       >
-                        {email}
-                      </a>
-                    </p>
-                  ))}
-                </div>
-
-                <div className="text-center">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary mb-4">
-                    <Phone className="h-6 w-6" />
+                        Full Name *
+                      </Label>
+                      <Input
+                        id="name"
+                        required
+                        value={formData.name}
+                        onChange={(e) =>
+                          handleInputChange("name", e.target.value)
+                        }
+                        placeholder="John Doe"
+                        className="rounded-xl border-stone-200 bg-stone-50 focus:bg-white"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="email"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
+                      >
+                        Email Address *
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={(e) =>
+                          handleInputChange("email", e.target.value)
+                        }
+                        placeholder="john@example.com"
+                        className="rounded-xl border-stone-200 bg-stone-50 focus:bg-white"
+                      />
+                    </div>
                   </div>
-                  <h4 className="font-semibold text-foreground mb-2">Phone</h4>
-                  <p className="text-sm text-muted-foreground">
-                    <a
-                      href={`tel:${officeInfo.phone}`}
-                      className="hover:text-primary transition-colors"
-                    >
-                      {officeInfo.phone}
-                    </a>
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Mon - Sat, 9am - 6pm IST
-                  </p>
-                </div>
-              </div>
-            </div>
 
-            {/* Contact Form Section */}
-            <div id="contact-form">
-              <div className="text-center mb-12">
-                <h3 className="font-serif text-3xl font-bold text-foreground mb-4">
-                  Send Us a Detailed Message
-                </h3>
-                <p className="text-muted-foreground max-w-2xl mx-auto">
-                  Have specific questions about a trek, need a custom itinerary,
-                  or want to discuss group bookings? We&apos;re here to help
-                  with all the details.
-                </p>
-              </div>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="phone"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
+                      >
+                        Phone Number (Optional)
+                      </Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        value={formData.phone}
+                        onChange={(e) =>
+                          handleInputChange("phone", e.target.value)
+                        }
+                        placeholder="+91 98765 43210"
+                        className="rounded-xl border-stone-200 bg-stone-50 focus:bg-white"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="city"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
+                      >
+                        City (Optional)
+                      </Label>
+                      <Select
+                        value={formData.city}
+                        onValueChange={(value) =>
+                          handleInputChange("city", value)
+                        }
+                      >
+                        <SelectTrigger className="rounded-xl border-stone-200 bg-stone-50">
+                          <SelectValue placeholder="Select your city" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="pune">Pune</SelectItem>
+                          <SelectItem value="mumbai">Mumbai</SelectItem>
+                          <SelectItem value="solapur">Solapur</SelectItem>
+                          <SelectItem value="other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
 
-              <div className="max-w-4xl mx-auto">
-                <Card className="border-0 bg-white/80 backdrop-blur-sm shadow-2xl shadow-black/5">
-                  <CardContent className="p-8 sm:p-12">
-                    {submitted ? (
-                      <div className="py-12 text-center">
-                        <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full from-green-400 to-green-600 text-white mb-6">
-                          <MessageCircle className="h-8 w-8" />
-                        </div>
-                        <h3 className="font-serif text-2xl font-bold text-foreground mb-3">
-                          Message Sent to WhatsApp!
-                        </h3>
-                        <p className="text-muted-foreground mb-2">
-                          Your message has been forwarded to our WhatsApp. Our
-                          team will respond to you shortly.
-                        </p>
-                        <p className="text-sm text-muted-foreground mb-8">
-                          If WhatsApp didn't open automatically, you can also
-                          call us directly or visit our office.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    <div className="space-y-2 flex flex-col">
+                      <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-1">
+                        Interested Trek
+                      </Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
                           <Button
                             variant="outline"
-                            onClick={() => setSubmitted(false)}
-                            className="border-primary text-primary hover:bg-primary hover:text-white"
+                            role="combobox"
+                            className={cn(
+                              "w-full justify-between rounded-xl border-stone-200 bg-stone-50 font-normal hover:bg-white",
+                              !formData.trek && "text-muted-foreground",
+                            )}
                           >
-                            Send Another Message
+                            {formData.trek
+                              ? dynamicTrekNames.find(
+                                  (trek) =>
+                                    trek.toLowerCase() === formData.trek,
+                                )
+                              : "Select a trek"}
+                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                           </Button>
-                          <Button asChild>
-                            <a href="/treks">Explore Our Treks</a>
-                          </Button>
-                        </div>
-                      </div>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-[300px] p-0" align="start">
+                          <Command>
+                            <CommandInput
+                              placeholder="Search trek..."
+                              onValueChange={setTrekSearch}
+                            />
+                            <CommandEmpty>No trek found.</CommandEmpty>
+                            <CommandGroup className="max-h-[300px] overflow-auto">
+                              {filteredTreks.map((trek) => (
+                                <CommandItem
+                                  key={trek}
+                                  value={trek}
+                                  onSelect={(currentValue) => {
+                                    handleInputChange("trek", currentValue);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      formData.trek === trek.toLowerCase()
+                                        ? "opacity-100"
+                                        : "opacity-0",
+                                    )}
+                                  />
+                                  {trek}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div className="space-y-2">
+                      <Label
+                        htmlFor="subject"
+                        className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
+                      >
+                        Subject *
+                      </Label>
+                      <Select
+                        required
+                        value={formData.subject}
+                        onValueChange={(value) =>
+                          handleInputChange("subject", value)
+                        }
+                      >
+                        <SelectTrigger className="rounded-xl border-stone-200 bg-stone-50">
+                          <SelectValue placeholder="How can we help?" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="booking">Trek Booking</SelectItem>
+                          <SelectItem value="inquiry">
+                            General Inquiry
+                          </SelectItem>
+                          <SelectItem value="custom">
+                            Custom Trek Request
+                          </SelectItem>
+                          <SelectItem value="group">
+                            Group Booking (10+)
+                          </SelectItem>
+                          <SelectItem value="feedback">Feedback</SelectItem>
+                          <SelectItem value="partnership">
+                            Partnership
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label
+                      htmlFor="message"
+                      className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400"
+                    >
+                      Message *
+                    </Label>
+                    <Textarea
+                      id="message"
+                      required
+                      value={formData.message}
+                      onChange={(e) =>
+                        handleInputChange("message", e.target.value)
+                      }
+                      placeholder="Tell us about your requirements..."
+                      className="min-h-[140px] rounded-xl border-stone-200 bg-stone-50 focus:bg-white resize-y"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full rounded-xl bg-zinc-950 py-6 text-[11px] font-bold uppercase tracking-[0.15em] text-white transition-all duration-300 hover:bg-zinc-800 hover:shadow-xl hover:shadow-zinc-950/20 hover:-translate-y-0.5"
+                    disabled={submitted}
+                  >
+                    {submitted ? (
+                      <span className="flex items-center gap-2">
+                        <Check className="h-4 w-4" /> Message Sent
+                      </span>
                     ) : (
-                      <form onSubmit={handleSubmit} className="space-y-8">
-                        <div className="grid gap-6 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="name"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Full Name *
-                            </Label>
-                            <Input
-                              id="name"
-                              value={formData.name}
-                              onChange={(e) =>
-                                handleInputChange("name", e.target.value)
-                              }
-                              placeholder="Enter your full name"
-                              required
-                              className="h-11 bg-white/50 border-border/50 focus:bg-white transition-all"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="email"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Email Address *
-                            </Label>
-                            <Input
-                              id="email"
-                              type="email"
-                              value={formData.email}
-                              onChange={(e) =>
-                                handleInputChange("email", e.target.value)
-                              }
-                              placeholder="your.email@example.com"
-                              required
-                              className="h-11 bg-white/50 border-border/50 focus:bg-white transition-all"
-                            />
-                          </div>
-                        </div>
-
-                        <div className="grid gap-6 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="phone"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Phone Number
-                            </Label>
-                            <Input
-                              id="phone"
-                              type="tel"
-                              value={formData.phone}
-                              onChange={(e) =>
-                                handleInputChange("phone", e.target.value)
-                              }
-                              placeholder="+91 XXXXX XXXXX"
-                              className="h-11 bg-white/50 border-border/50 focus:bg-white transition-all"
-                            />
-                          </div>
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="city"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Your City
-                            </Label>
-                            <Select
-                              value={formData.city}
-                              onValueChange={(value) =>
-                                handleInputChange("city", value)
-                              }
-                            >
-                              <SelectTrigger
-                                id="city"
-                                className="h-11 bg-white/50 border-border/50 focus:bg-white transition-all"
-                              >
-                                <SelectValue placeholder="Select your city" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="pune">🏢 Pune</SelectItem>
-                                <SelectItem value="mumbai">
-                                  🏙️ Mumbai
-                                </SelectItem>
-                                <SelectItem value="solapur">
-                                  🏡 Solapur
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-
-                        <div className="grid gap-6 sm:grid-cols-2">
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="trek"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Interested Trek
-                            </Label>
-                      
-                            <div className="space-y-2">
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <Button
-                                    variant="outline"
-                                    role="combobox"
-                                    className="h-11 w-full justify-between bg-white/50 border-border/50 focus:bg-white transition-all"
-                                  >
-                                    {formData.trek || "Select a trek"}
-                                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                                  </Button>
-                                </PopoverTrigger>
-
-                                <PopoverContent className="w-full p-0">
-                                  <Command>
-                                    <CommandInput placeholder="Search trek..." />
-                                    <CommandEmpty>No trek found.</CommandEmpty>
-
-                                    <CommandGroup className="max-h-60 overflow-y-auto">
-                                      {filteredTreks.map((trek) => (
-                                        <CommandItem
-                                          key={trek}
-                                          value={trek}
-                                          onSelect={() =>
-                                            handleInputChange("trek", trek)
-                                          }
-                                        >
-                                          <Check
-                                            // className={cn(
-                                            //   "mr-2 h-4 w-4",
-                                            //   formData.trek === trek
-                                            //     ? "opacity-100"
-                                            //     : "opacity-0",
-                                            // )}
-                                          />
-                                          🏔️ {trek}
-                                        </CommandItem>
-                                      ))}
-                                    </CommandGroup>
-                                  </Command>
-                                </PopoverContent>
-                              </Popover>
-                            </div>
-                          </div>
-                          <div className="space-y-2">
-                            <Label
-                              htmlFor="subject"
-                              className="text-sm font-medium text-foreground"
-                            >
-                              Subject *
-                            </Label>
-                            <Select
-                              value={formData.subject}
-                              onValueChange={(value) =>
-                                handleInputChange("subject", value)
-                              }
-                              required
-                            >
-                              <SelectTrigger
-                                id="subject"
-                                className="h-11 bg-white/50 border-border/50 focus:bg-white transition-all"
-                              >
-                                <SelectValue placeholder="What can we help you with?" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="booking">
-                                  🏔️ Trek Booking
-                                </SelectItem>
-                                <SelectItem value="inquiry">
-                                  ❓ General Inquiry
-                                </SelectItem>
-                                <SelectItem value="custom">
-                                  🎯 Custom Trek Request
-                                </SelectItem>
-                                <SelectItem value="group">
-                                  👥 Group Booking
-                                </SelectItem>
-                                <SelectItem value="feedback">
-                                  💬 Feedback
-                                </SelectItem>
-                                <SelectItem value="partnership">
-                                  🤝 Partnership
-                                </SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label
-                            htmlFor="message"
-                            className="text-sm font-medium text-foreground"
-                          >
-                            Message *
-                          </Label>
-                          <Textarea
-                            id="message"
-                            value={
-                              formData.message ||
-                              "Tell us about your trekking plans, questions, or special requirements. The more details you share, the better we can assist you!"
-                            }
-                            onChange={(e) =>
-                              handleInputChange("message", e.target.value)
-                            }
-                            placeholder="Tell us about your trekking plans, questions, or special requirements. The more details you share, the better we can assist you!"
-                            rows={6}
-                            required
-                            className="bg-white/50 border-border/50 focus:bg-white transition-all resize-none"
-                          />
-                        </div>
-
-                        <div className="pt-4">
-                          <Button
-                            type="submit"
-                            size="lg"
-                            className="w-full h-12 gap-3 from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-lg font-semibold shadow-xl shadow-green-500/20 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/30"
-                          >
-                            <MessageCircle className="h-5 w-5" />
-                            Send to WhatsApp
-                          </Button>
-                          <p className="text-xs text-muted-foreground text-center mt-3">
-                            By sending this message, you agree to our privacy
-                            policy. We respect your privacy and will never share
-                            your information.
-                          </p>
-                        </div>
-                      </form>
+                      <span className="flex items-center gap-2">
+                        Send via WhatsApp <Send className="h-4 w-4" />
+                      </span>
                     )}
-                  </CardContent>
-                </Card>
+                  </Button>
+                </form>
+              </div>
+
+              {/* Office Info */}
+              <div className="flex flex-col justify-center">
+                <div className="rounded-3xl bg-stone-50 p-8 sm:p-10 border border-stone-200 lg:p-12">
+                  <h3 className="text-3xl font-light text-zinc-900 mb-8" style={{ fontFamily: "var(--font-playfair)" }}>
+                    Our Basecamp
+                  </h3>
+
+                  <div className="space-y-7">
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-stone-200 bg-white">
+                        <MapPin className="h-5 w-5 text-zinc-900" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">
+                          Visit Us
+                        </p>
+                        {officeInfo.address.map((line) => (
+                          <p
+                            key={line}
+                            className="text-sm text-stone-600"
+                          >
+                            {line}
+                          </p>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-stone-200 bg-white">
+                        <Mail className="h-5 w-5 text-zinc-900" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">
+                          Email Us
+                        </p>
+                        {officeInfo.email.map((email) => (
+                          <a
+                            key={email}
+                            href={`mailto:${email}`}
+                            className="block text-sm text-stone-600 hover:text-zinc-900 transition-colors"
+                          >
+                            {email}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-stone-200 bg-white">
+                        <Phone className="h-5 w-5 text-zinc-900" />
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-stone-400 mb-2">
+                          Call Us
+                        </p>
+                        <a
+                          href={`tel:${officeInfo.phone}`}
+                          className="block text-sm text-stone-600 hover:text-zinc-900 transition-colors"
+                        >
+                          {officeInfo.phone}
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-10 overflow-hidden rounded-xl border border-stone-200 bg-white">
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27161.42445889246!2d77.16439169999999!3d32.247653200000004!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39048708163fd03f%3A0x8129a80ebe5076cd!2sOld%20Manali%2C%20Manali%2C%20Himachal%20Pradesh%20175131!5e0!3m2!1sen!2sin!4v1709900000000!5m2!1sen!2sin"
+                      width="100%"
+                      height="280"
+                      style={{ border: 0 }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className="grayscale hover:grayscale-0 transition-all duration-500"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
