@@ -1,31 +1,27 @@
 import { redirect } from "next/navigation";
 import { getAdminSession } from "@/lib/auth";
 import { LoginForm } from "@/components/admin/login-form";
+import { Mountain } from "lucide-react";
 
 export default async function AdminLoginPage() {
   const isAuthenticated = await getAdminSession();
   if (isAuthenticated) redirect("/admin/dashboard");
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#EDE8DC] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-stone-50 p-6">
       <div className="w-full max-w-md">
-        <div className="clay-card-sm p-10">
+        <div className="rounded-2xl border border-stone-200 bg-white p-10 shadow-sm">
           <div className="mb-8 text-center">
-            <div
-              className="mx-auto mb-4 flex h-14 w-14 items-center justify-center text-2xl"
-              style={{
-                background: "linear-gradient(135deg, #4A7C3F, #2D5016)",
-                borderRadius: "50% 40% 50% 38%",
-                boxShadow:
-                  "0 4px 12px rgba(74,124,63,0.4), inset 0 1px 0 rgba(255,255,255,0.3)",
-              }}
-            >
-              🏔
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-zinc-950 text-white">
+              <Mountain className="h-6 w-6" />
             </div>
-            <h1 className="font-serif text-2xl font-semibold text-[#2D5016]">
+            <h1
+              className="text-2xl font-light text-zinc-950"
+              style={{ fontFamily: "var(--font-playfair)" }}
+            >
               Admin Login
             </h1>
-            <p className="mt-1 text-sm text-[#8B7355]">
+            <p className="mt-1 text-sm text-stone-400">
               Miles with Nature
             </p>
           </div>

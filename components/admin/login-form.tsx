@@ -3,6 +3,9 @@
 import { useActionState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "@/lib/data-store";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 function LoginFormInner({
   error,
@@ -12,63 +15,49 @@ function LoginFormInner({
   return (
     <div>
       {error && (
-        <div
-          className="mb-4 rounded-xl px-4 py-3 text-sm font-medium"
-          style={{
-            background: "rgba(220,80,60,0.1)",
-            color: "#8B1A0A",
-          }}
-        >
+        <div className="mb-4 rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm font-medium text-destructive">
           {error}
         </div>
       )}
       <div className="space-y-4">
-        <div>
-          <label
+        <div className="space-y-2">
+          <Label
             htmlFor="email"
-            className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]"
+            className="text-[11px] font-bold uppercase tracking-[0.15em] text-stone-400"
           >
             Email
-          </label>
-          <input
+          </Label>
+          <Input
             id="email"
             name="email"
             type="email"
             required
-            className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] transition-all placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-            style={{
-              background: "#FDFAF5",
-              color: "#2C2816",
-            }}
             placeholder="admin@mileswithnature.com"
+            className="h-11 rounded-xl border-stone-200 bg-stone-50 text-sm placeholder:text-stone-300 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50"
           />
         </div>
-        <div>
-          <label
+        <div className="space-y-2">
+          <Label
             htmlFor="password"
-            className="mb-1.5 block text-xs font-bold uppercase tracking-widest text-[#8B7355]"
+            className="text-[11px] font-bold uppercase tracking-[0.15em] text-stone-400"
           >
             Password
-          </label>
-          <input
+          </Label>
+          <Input
             id="password"
             name="password"
             type="password"
             required
-            className="w-full rounded-2xl border-none px-4 py-3 text-sm outline-none ring-1 ring-[#E8D5B7] transition-all placeholder:text-[#B8A88A] focus:ring-2 focus:ring-[#4A7C3F]"
-            style={{
-              background: "#FDFAF5",
-              color: "#2C2816",
-            }}
             placeholder="••••••••"
+            className="h-11 rounded-xl border-stone-200 bg-stone-50 text-sm placeholder:text-stone-300 focus-visible:border-zinc-950 focus-visible:ring-zinc-950/50"
           />
         </div>
-        <button
+        <Button
           type="submit"
-          className="btn-clay-primary w-full justify-center py-3.5 text-xs"
+          className="w-full rounded-xl bg-zinc-950 py-5 text-[11px] font-bold uppercase tracking-[0.15em] text-white hover:bg-zinc-900 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300"
         >
           Sign In
-        </button>
+        </Button>
       </div>
     </div>
   );

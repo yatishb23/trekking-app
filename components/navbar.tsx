@@ -42,10 +42,10 @@ export function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className={cn(
-            "pointer-events-auto flex w-full max-w-6xl items-center justify-between rounded-2xl border px-5 py-3 backdrop-blur-2xl transition-all duration-500 sm:px-6",
+            "pointer-events-auto flex w-full max-w-6xl items-center justify-between rounded-2xl border border-black/[0.06] bg-white/80 px-5 py-3 backdrop-blur-2xl transition-shadow duration-300 sm:px-6",
             scrolled
-              ? "border-black/[0.08] bg-white/80 shadow-[0_2px_40px_rgb(0,0,0,0.06)]"
-              : "border-white/20 bg-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
+              ? "shadow-[0_2px_40px_rgb(0,0,0,0.08)]"
+              : "shadow-[0_8px_30px_rgb(0,0,0,0.04)]"
           )}
         >
           {/* LOGO */}
@@ -61,7 +61,7 @@ export function Navbar() {
               />
             </div>
             <span className="font-serif text-lg font-semibold tracking-tight text-zinc-900 sm:text-xl">
-              Miles with <em className="font-light italic text-stone-400">Nature</em>
+              Miles with <em className="font-light italic text-stone-500">Nature</em>
             </span>
           </Link>
 
@@ -77,7 +77,7 @@ export function Navbar() {
                       "relative px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-300 rounded-xl",
                       isActive
                         ? "text-zinc-900 bg-zinc-950/[0.05]"
-                        : "text-stone-400 hover:text-zinc-900 hover:bg-zinc-950/[0.04]"
+                        : "text-stone-500 hover:text-zinc-900 hover:bg-zinc-950/[0.04]"
                     )}
                   >
                     {link.label}
@@ -174,7 +174,7 @@ export function Navbar() {
                           "flex items-center rounded-xl px-4 py-3 text-sm font-medium tracking-wide transition-all duration-200",
                           isActive
                             ? "bg-zinc-950/[0.05] text-zinc-900"
-                            : "text-stone-500 hover:bg-zinc-950/[0.03] hover:text-zinc-900"
+                            : "text-stone-600 hover:bg-zinc-950/[0.03] hover:text-zinc-900"
                         )}
                       >
                         {link.label}
